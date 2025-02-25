@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "540834339175",
+    "firebase_url": "https://oreum-point.firebaseio.com",
+    "project_id": "oreum-point",
+    "storage_bucket": "oreum-point.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:540834339175:android:d2c8e8dc4491d94aab37c2",
+        "android_client_info": {
+          "package_name": "kr.puze.coupon_market"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "540834339175-609a3ms8v2pbm3a1peeeg6ki5dk5k3g3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDAjMlyiEcGhLCIh9SlBOmSaiPQKp7Y2FU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "540834339175-609a3ms8v2pbm3a1peeeg6ki5dk5k3g3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:540834339175:android:3ef0526d4d734e74ab37c2",
+        "android_client_info": {
+          "package_name": "kr.puze.couponbook"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "540834339175-609a3ms8v2pbm3a1peeeg6ki5dk5k3g3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDAjMlyiEcGhLCIh9SlBOmSaiPQKp7Y2FU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "540834339175-609a3ms8v2pbm3a1peeeg6ki5dk5k3g3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

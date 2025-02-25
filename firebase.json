@@ -1,0 +1,30 @@
+{
+  "flutter": {
+    "platforms": {
+      "ios": {
+        "default": {
+          "projectId": "oreum-point",
+          "appId": "1:540834339175:ios:aa5386359ef10fb8ab37c2",
+          "uploadDebugSymbols": false,
+          "fileOutput": "ios/Runner/GoogleService-Info.plist"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "oreum-point",
+          "configurations": {
+            "android": "1:540834339175:android:d2c8e8dc4491d94aab37c2",
+            "ios": "1:540834339175:ios:aa5386359ef10fb8ab37c2"
+          }
+        }
+      },
+      "android": {
+        "default": {
+          "projectId": "oreum-point",
+          "appId": "1:540834339175:android:d2c8e8dc4491d94aab37c2",
+          "fileOutput": "android/app/google-services.json"
+        }
+      }
+    }
+  }
+}

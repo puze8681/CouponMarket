@@ -12,7 +12,7 @@ END USER LICENSE AGREEMENT
 
 Last updated March 31, 2025
 
-AQUAL is licensed to You (End-User) by LEEBIO INC., located and registered at 203-1, KNU Startup CUBE 2step, 1 Kangwondaehak-gil,,
+COUPON_MARKET is licensed to You (End-User) by LEEBIO INC., located and registered at 203-1, KNU Startup CUBE 2step, 1 Kangwondaehak-gil,,
 Gangwon-do, chuncheon-si 24341, South Korea ("Licensor"), for use only under the terms of this License Agreement.
 
 By downloading the Licensed Application from Apple's software distribution platform ("App Store") and Google's software distribution platform
@@ -28,11 +28,11 @@ This License Agreement may not provide for usage rules for the Licensed Applicat
 Terms and Conditions and Google Play Terms of Service ("Usage Rules"). LEEBIO INC. acknowledges that it had the opportunity to review
 the Usage Rules and this License Agreement is not conflicting with them.
 
-AQUAL when purchased or downloaded through the Services, is licensed to You for use only under the terms of this License Agreement.
-The Licensor reserves all rights not expressly granted to You. AQUAL is to be used on devices that operate with Apple's operating systems
+COUPON_MARKET when purchased or downloaded through the Services, is licensed to You for use only under the terms of this License Agreement.
+The Licensor reserves all rights not expressly granted to You. COUPON_MARKET is to be used on devices that operate with Apple's operating systems
 ("iOS" and "Mac OS") or Google's operating system ("Android").
 1. THE APPLICATION
-AQUAL ("Licensed Application") is a piece of software created to Provide users with a convenient way to analyze and monitor various
+COUPON_MARKET ("Licensed Application") is a piece of software created to Provide users with a convenient way to analyze and monitor various
 health parameters using advanced diagnostic tools, including sperm testing, pet urine analysis, and water quality testing. - and customized
 for iOS and Android mobile devices ("Devices"). It is used to Provide users with a convenient way to analyze and monitor various health
 parameters using advanced diagnostic tools, including sperm testing, pet urine analysis, and water quality testing ..
@@ -159,7 +159,7 @@ This License Agreement is governed by the laws of the United States, excluding i
 ''';
 
   static const String privacyText = '''
-This Privacy Policy ("Policy") applies to AQUAL, and LEEBIO ("Company") and governs data
+This Privacy Policy ("Policy") applies to COUPON_MARKET, and LEEBIO ("Company") and governs data
 collection and usage. For the purposes of this Privacy Policy, unless otherwise noted, all
 references to the Company include _________________. The Company's application is a Water
 quality testing results display application. application. By using the Company application, you

@@ -487,4 +487,4 @@ extension BoolFromDateTime on DateTime {
   }
 }
 
-MethodChannel get channel => const MethodChannel('kr.puze.aqual');
+MethodChannel get channel => const MethodChannel('kr.puze.coupon_market');
