@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:coupon_market/manager/firestore_manager.dart';
-import 'package:coupon_market/model/test_result.dart';
+import 'package:coupon_market/model/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

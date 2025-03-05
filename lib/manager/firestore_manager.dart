@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:coupon_market/manager/firebase_manager.dart';
 import 'package:coupon_market/manager/auth_manager.dart';
 import 'package:coupon_market/model/notification_data.dart';
-import 'package:coupon_market/model/test_result.dart';
+import 'package:coupon_market/model/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:uuid/uuid.dart';

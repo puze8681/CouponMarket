@@ -1,8 +1,4 @@
-import 'dart:convert';
-import 'package:coupon_market/manager/auth_manager.dart';
-import 'package:coupon_market/util/extensions.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:uuid/uuid.dart';
 
 class NotificationData {
   final String text;

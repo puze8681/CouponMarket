@@ -1,7 +1,7 @@
 import 'package:coupon_market/component/common/asset_widget.dart';
 import 'package:coupon_market/constant/colors.dart';
 import 'package:coupon_market/constant/typo.dart';
-import 'package:coupon_market/model/test_result.dart';
+import 'package:coupon_market/model/user.dart';
 import 'package:coupon_market/util/extensions.dart';
 import 'package:flutter/material.dart';
 

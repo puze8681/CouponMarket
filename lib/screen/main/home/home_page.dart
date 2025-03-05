@@ -9,7 +9,7 @@ import 'package:coupon_market/component/modal/image_modal.dart';
 import 'package:coupon_market/constant/assets.dart';
 import 'package:coupon_market/constant/colors.dart';
 import 'package:coupon_market/constant/typo.dart';
-import 'package:coupon_market/model/test_result.dart';
+import 'package:coupon_market/model/user.dart';
 import 'package:coupon_market/component/common/test_result_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
