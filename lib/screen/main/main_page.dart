@@ -4,11 +4,10 @@ import 'package:coupon_market/component/modal/default_modal.dart';
 import 'package:coupon_market/component/modal/text_modal.dart';
 import 'package:coupon_market/constant/assets.dart';
 import 'package:coupon_market/constant/colors.dart';
-import 'package:coupon_market/manager/location_manager.dart';
-import 'package:coupon_market/screen/main/history/history_page.dart';
 import 'package:coupon_market/screen/main/home/home_page.dart';
 import 'package:coupon_market/screen/main/main_tab_item.dart';
 import 'package:coupon_market/screen/main/profile/profile_page.dart';
+import 'package:coupon_market/screen/main/store/store_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -102,7 +101,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
               physics: const NeverScrollableScrollPhysics(),
               children: [
                 HomePage(onAnimateTab: _onAnimateTab),
-                const HistoryPage(),
+                const StorePage(),
                 const SizedBox(),
                 const SizedBox(),
                 const ProfilePage(),

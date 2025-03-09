@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserCoupon {
+  final String id;
   final String couponId;
   final String storeId;
   final String storeName;
@@ -12,6 +13,7 @@ class UserCoupon {
   final DateTime createdAt;
 
   UserCoupon({
+    required this.id,
     required this.couponId,
     required this.storeId,
     required this.storeName,
@@ -27,6 +29,7 @@ class UserCoupon {
   factory UserCoupon.fromFirestore(DocumentSnapshot doc) {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
     return UserCoupon(
+      id: data['id'] ?? '',
       couponId: data['couponId'] ?? '',
       storeId: data['storeId'] ?? '',
       storeName: data['storeName'] ?? '',
@@ -42,6 +45,7 @@ class UserCoupon {
   // From JSON
   factory UserCoupon.fromJson(Map<String, dynamic> json) {
     return UserCoupon(
+      id: json['id'] ?? '',
       couponId: json['couponId'] ?? '',
       storeId: json['storeId'] ?? '',
       storeName: json['storeName'] ?? '',
@@ -69,6 +73,7 @@ class UserCoupon {
   // To Firestore
   Map<String, dynamic> toFirestore() {
     return {
+      'id': id,
       'couponId': couponId,
       'storeId': storeId,
       'storeName': storeName,
@@ -84,6 +89,7 @@ class UserCoupon {
   // To JSON
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
       'couponId': couponId,
       'storeId': storeId,
       'storeName': storeName,
@@ -109,6 +115,7 @@ class UserCoupon {
     DateTime? createdAt,
   }) {
     return UserCoupon(
+      id: id,
       couponId: couponId ?? this.couponId,
       storeId: storeId ?? this.storeId,
       storeName: storeName ?? this.storeName,

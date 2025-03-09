@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coupon_market/model/user_coupon.dart';
+import 'package:uuid/uuid.dart';
 
 class Coupon {
   final String id;
@@ -137,6 +139,22 @@ class Coupon {
       postEndAt: postEndAt ?? this.postEndAt,
       useStartAt: useStartAt ?? this.useStartAt,
       useEndAt: useEndAt ?? this.useEndAt,
+    );
+  }
+
+  // Create UserCoupon from this Coupon
+  UserCoupon download(String userId) {
+    return UserCoupon(
+      id: const Uuid().v4(),
+      couponId: id,
+      storeId: storeId,
+      storeName: storeName,
+      userId: userId,
+      title: title,
+      description: description,
+      useStartAt: useStartAt,
+      useEndAt: useEndAt,
+      createdAt: DateTime.now(),
     );
   }
 }

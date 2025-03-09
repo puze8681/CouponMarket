@@ -4,8 +4,9 @@ import 'dart:io';
 import 'package:coupon_market/manager/firebase_manager.dart';
 import 'package:coupon_market/manager/auth_manager.dart';
 import 'package:coupon_market/model/notification_data.dart';
-import 'package:coupon_market/model/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coupon_market/model/store.dart';
+import 'package:coupon_market/model/user_coupon.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:uuid/uuid.dart';
 import 'package:path/path.dart' as path;
@@ -23,12 +24,14 @@ abstract class FireStoreService {
   Future<List<String>> getCategoryList(); // category
   Future<void> deleteCategory(String category); // category
 
+  Future<(List<Store>, DocumentSnapshot?)> getStoreList(int limit, DocumentSnapshot? lastDocument); // result
+  
   Future<String> uploadImage(File image);
-  Future<void> postTestResult(TestResult result); // result
-  Future<TestResult?> getTestResult(String id); // result
-  Future<(List<TestResult>, DocumentSnapshot?)> getTestResultList(int limit, DocumentSnapshot? lastDocument); // result
-  Future<void> patchTestResult(TestResult result); // result
-  Future<void> deleteTestResult(String category); // result
+  Future<void> postUserCoupon(UserCoupon coupon); // result
+  Future<UserCoupon?> getUserCoupon(String id); // result
+  Future<(List<UserCoupon>, DocumentSnapshot?)> getUserCouponList(int limit, DocumentSnapshot? lastDocument); // result
+  Future<void> patchUserCoupon(UserCoupon result); // result
+  Future<void> deleteUserCoupon(String category); // result
 
   Future<void> postNotification(NotificationData notification); // notification
   Future<(List<NotificationData>, DocumentSnapshot?)> getNotificationList(int limit, DocumentSnapshot? lastDocument); // notification
@@ -38,6 +41,7 @@ abstract class FireStoreService {
 class FireStoreManager extends FireStoreService {
   var uuid = const Uuid();
   // {STORE_ID}/{DEVICE_ID}/versions/{VERSION}/{DOC_NAME}/
+  var instance = firebaseManager.firestoreInstance;
   var userCollection = firebaseManager.firestoreInstance.collection('user');
   var dataCollection = firebaseManager.firestoreInstance.collection('data');
 
@@ -141,9 +145,38 @@ class FireStoreManager extends FireStoreService {
     } catch (e) {
       rethrow;
     }
-
-
   }
+
+  @override
+  Future<(List<Store>, DocumentSnapshot?)> getStoreList(int limit, DocumentSnapshot? lastDocument) async {
+    // 쿼리 시작
+    Query query = instance
+        .collection('store')
+        .orderBy('createdAt', descending: true)
+        .limit(limit);
+
+    // 이전 페이지가 있는 경우
+    if (lastDocument != null) {
+      query = query.startAfter([lastDocument]);
+    }
+
+    // 데이터 가져오기
+    final querySnapshot = await query.get();
+
+    // 결과가 없는 경우 빈 리스트 반환
+    if (querySnapshot.docs.isEmpty) {
+      return (List<Store>.from([]), null);
+    }
+
+    // 문서들을 Notification 객체로 변환
+    final resultList = querySnapshot.docs.map((doc) {
+      final data = doc.data() as Map<String, dynamic>;
+      return Store.fromJson(data);
+    }).toList();
+
+    return (resultList, querySnapshot.docs.lastOrNull);
+  }
+  
 
   @override
   Future<String> uploadImage(File image) async {
@@ -170,26 +203,27 @@ class FireStoreManager extends FireStoreService {
   }
 
   @override
-  Future<void> postTestResult(TestResult result) async {
-    await dataCollection.doc(authManager.user.uid).collection("results").doc(result.id).set(result.toJson());
+  Future<void> postUserCoupon(UserCoupon coupon) async {
+    await dataCollection.doc(authManager.user.uid).collection("coupon").doc(coupon.id).set(coupon.toJson());
   }
 
-  Future<TestResult?> getTestResult(String id) async {
-    var doc = await dataCollection.doc(authManager.user.uid).collection("results").doc(id).get();
+  @override
+  Future<UserCoupon?> getUserCoupon(String id) async {
+    var doc = await dataCollection.doc(authManager.user.uid).collection("coupon").doc(id).get();
     if(doc.exists){
       final data = doc.data() as Map<String, dynamic>;
-      return TestResult.fromJson(data);
+      return UserCoupon.fromJson(data);
     }else{
       return null;
     }
   }
 
   @override
-  Future<(List<TestResult>, DocumentSnapshot?)> getTestResultList(int limit, DocumentSnapshot? lastDocument) async {
+  Future<(List<UserCoupon>, DocumentSnapshot?)> getUserCouponList(int limit, DocumentSnapshot? lastDocument) async {
     // 쿼리 시작
     Query query = dataCollection
         .doc(authManager.user.uid)
-        .collection('results')
+        .collection('coupon')
         .orderBy('createdAt', descending: true)
         .limit(limit);
 
@@ -203,25 +237,25 @@ class FireStoreManager extends FireStoreService {
 
     // 결과가 없는 경우 빈 리스트 반환
     if (querySnapshot.docs.isEmpty) {
-      return (List<TestResult>.from([]), null);
+      return (List<UserCoupon>.from([]), null);
     }
 
     // 문서들을 Notification 객체로 변환
     final resultList = querySnapshot.docs.map((doc) {
       final data = doc.data() as Map<String, dynamic>;
-      return TestResult.fromJson(data);
+      return UserCoupon.fromJson(data);
     }).toList();
 
     return (resultList, querySnapshot.docs.lastOrNull);
   }
 
   @override
-  Future<void> patchTestResult(TestResult result) async {
+  Future<void> patchUserCoupon(UserCoupon result) async {
     await dataCollection.doc(authManager.user.uid).collection("results").doc(result.id).set(result.toJson());
   }
 
   @override
-  Future<void> deleteTestResult(String category) async {
+  Future<void> deleteUserCoupon(String category) async {
     var doc = dataCollection.doc(authManager.user.uid).collection("results").where("category", isEqualTo: category);
     var querySnapshot = await doc.get();
     var snapshotList = querySnapshot.docs;

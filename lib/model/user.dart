@@ -107,4 +107,6 @@ class User {
       createdAt: createdAt ?? this.createdAt,
     );
   }
+
+  String get tGender => gender ? "남자" : "여자";
 }

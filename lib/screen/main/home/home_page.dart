@@ -1,23 +1,17 @@
-import 'dart:io';
 import 'dart:ui';
 
 import 'package:coupon_market/bloc/main/home/home_bloc.dart';
 import 'package:coupon_market/component/common/asset_widget.dart';
+import 'package:coupon_market/component/common/store_widget.dart';
 import 'package:coupon_market/component/indicator_widget.dart';
-import 'package:coupon_market/component/modal/default_modal.dart';
-import 'package:coupon_market/component/modal/image_modal.dart';
 import 'package:coupon_market/constant/assets.dart';
 import 'package:coupon_market/constant/colors.dart';
 import 'package:coupon_market/constant/typo.dart';
-import 'package:coupon_market/model/user.dart';
-import 'package:coupon_market/component/common/test_result_widget.dart';
+import 'package:coupon_market/model/store.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:coupon_market/router/app_routes.dart';
 import 'package:coupon_market/util/extensions.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class HomePage extends StatefulWidget {
   final Function(int) onAnimateTab;
@@ -49,74 +43,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     }
   }
 
-  _onClickTest(TestResult testResult) {
-    Navigator.pushNamed(context, routeBluetoothResultPage,
-        arguments: {"testResult": testResult});
-  }
-
-  _onClickImage(TestResult testResult) {
-    showModal(
-      barrierDismissible: false,
-      context: context,
-      builder: (_) {
-        return ImageModal(
-          onClickCamera: () => _onClickCamera(testResult),
-          onClickGallery: () => _onClickGallery(testResult),
-        );
-      },
-    );
-  }
-
-  ImagePicker picker = ImagePicker();
-
-  _onClickCamera(TestResult testResult) async {
-    Navigator.of(context).pop();
-    picker.pickImage(source: ImageSource.camera).then((value) async {
-      if (value != null) {
-        File file = File(value.path.toString());
-        _setFile(testResult, file);
-      }
-    }).onError((error, stackTrace) => _onHandleError(error));
-  }
-
-  _onClickGallery(TestResult testResult) async {
-    Navigator.of(context).pop();
-    picker.pickImage(source: ImageSource.gallery).then((value) async {
-      if (value != null) {
-        File file = File(value.path.toString());
-        _setFile(testResult, file);
-      }
-    }).onError((error, stackTrace) => _onHandleError(error));
-  }
-
-  _setFile(TestResult testResult, File file) async {
-    _bloc.add(ImageHome(testResult, file));
-  }
-
-  _onHandleError(Object? error) {
-    if (error is PlatformException) {
-      getPermission();
-    }
-  }
-
-  Future<void> getPermission() async {
-    final statusStorage = await Permission.storage.request();
-    final statusCamera = await Permission.camera.request();
-    if (statusStorage == PermissionStatus.granted &&
-        statusCamera == PermissionStatus.granted) {
-      /// 둘 다 APPROVED
-      print('Permission granted');
-    } else if (statusStorage == PermissionStatus.permanentlyDenied ||
-        statusCamera == PermissionStatus.permanentlyDenied) {
-      /// 둘 다 PERMANENT DENIED
-      print('Take the user to the settings page.');
-      await openAppSettings();
-    } else if (statusStorage == PermissionStatus.denied ||
-        statusCamera == PermissionStatus.denied) {
-      /// 1개 이상 DENIED
-      print(
-          'Permission denied. Show a dialog and again ask for the permission');
-    }
+  _onClickStore(Store store) {
+    // Navigator.pushNamed(context, routeBluetoothResultPage, arguments: {"testResult": testResult});
   }
 
   @override
@@ -153,7 +81,7 @@ extension on _HomePageState {
                             child: Column(
                               children: [
                                 categoryWidget(),
-                                testWidget(state.testList),
+                                testWidget(state.storeList),
                               ],
                             ),
                           ),
@@ -318,7 +246,7 @@ extension on _HomePageState {
     );
   }
 
-  Widget testWidget(List<TestResult> testList) {
+  Widget testWidget(List<Store> storeList) {
     return Padding(
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -329,14 +257,13 @@ extension on _HomePageState {
           ListView.separated(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemBuilder: (BuildContext context, int index) => TestResultWidget(
-              testResult: testList[index],
-              onClickTest: _onClickTest,
-              onClickImage: _onClickImage,
+            itemBuilder: (BuildContext context, int index) => StoreWidget(
+              store: storeList[index],
+              onClickStore: _onClickStore,
             ),
             separatorBuilder: (BuildContext context, int index) =>
                 const SizedBox(height: 10),
-            itemCount: testList.length,
+            itemCount: storeList.length,
           )
         ],
       ),
