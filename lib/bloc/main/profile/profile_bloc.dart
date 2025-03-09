@@ -1,9 +1,7 @@
-import 'package:coupon_market/manager/auth_manager.dart';
 import 'package:coupon_market/manager/firebase_manager.dart';
 import 'package:coupon_market/manager/firestore_manager.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
@@ -48,11 +46,6 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         if(type == 0 && event.password != null){
           authCredential = EmailAuthProvider.credential(email: user.email ?? "", password: event.password!);
         }else if(type == 1){
-          LoginResult result = await FacebookAuth.instance.login();
-          if(result.accessToken != null) {
-            authCredential = FacebookAuthProvider.credential(result.accessToken!.tokenString);
-          }
-        }else if(type == 2){
           GoogleSignIn googleSignIn = GoogleSignIn();
           GoogleSignInAccount? account = await googleSignIn.signIn();
           if (account != null) {
@@ -62,7 +55,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
               accessToken: authentication.accessToken,
             );
           }
-        }else if(type == 3){
+        }else if(type == 2){
           final AuthorizationCredentialAppleID appleCredential = await SignInWithApple.getAppleIDCredential(
             scopes: [
               AppleIDAuthorizationScopes.email,

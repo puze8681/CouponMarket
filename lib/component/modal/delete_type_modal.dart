@@ -30,11 +30,9 @@ class DeleteTypeModal extends StatelessWidget {
             children: [
               emailButton,
               const SizedBox(width: 6),
-              typeButton(1, Assets.ic_login_facebook),
-              const SizedBox(width: 6),
-              typeButton(2, Assets.ic_login_google),
+              typeButton(1, Assets.ic_login_google),
               if(Platform.isIOS) const SizedBox(width: 6),
-              if(Platform.isIOS) typeButton(3, Assets.ic_login_facebook),
+              if(Platform.isIOS) typeButton(2, Assets.ic_login_apple),
             ],
           )
         ],

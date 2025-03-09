@@ -1,14 +1,10 @@
-import 'dart:developer';
-
 import 'package:coupon_market/manager/firebase_manager.dart';
 import 'package:coupon_market/manager/firestore_manager.dart';
 import 'package:coupon_market/manager/auth_manager.dart';
-import 'package:coupon_market/util/extensions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 abstract class LoginEvent {}
 class DoLogin extends LoginEvent {
@@ -16,7 +12,6 @@ class DoLogin extends LoginEvent {
   String password;
   DoLogin(this.email, this.password);
 }
-class FacebookLogin extends LoginEvent {}
 class GoogleLogin extends LoginEvent {}
 class AppleLogin extends LoginEvent {}
 
@@ -35,7 +30,6 @@ class LoginDone extends LoginState {
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginBloc() : super(LoginDefault()) {
     on<DoLogin>(_onDo);
-    on<FacebookLogin>(_onFacebook);
     on<GoogleLogin>(_onGoogle);
     on<AppleLogin>(_onApple);
   }
@@ -53,31 +47,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         emit(LoginDefault());
       }
     } catch (e) {
-      emit(LoginDefault(message: e.toString()));
-    }
-  }
-
-  _onFacebook(FacebookLogin event, Emitter<LoginState> emit) async {
-    try{
-      emit(LoginLoading());
-      LoginResult result = await FacebookAuth.instance.login();
-      if(result.accessToken != null){
-        final OAuthCredential oAuthCredential = FacebookAuthProvider.credential(result.accessToken!.tokenString);
-        var credential = await firebaseManager.auth.signInWithCredential(oAuthCredential);
-        var user = credential.user;
-        if(user != null){
-          authManager.setUser(user);
-          bool isUserExist = await fireStoreManager.isUserExist(user.uid);
-          emit(LoginDone(isUserExist));
-        }else{
-          emit(LoginDefault());
-        }
-      }else if(result.message != null){
-        emit(LoginDefault(message: result.message));
-      }else{
-        emit(LoginDefault());
-      }
-    } catch (e){
       emit(LoginDefault(message: e.toString()));
     }
   }

@@ -44,7 +44,6 @@ class _LoginPageState extends State<LoginPage> {
       _bloc.add(DoLogin(email, password));
     }
   }
-  _onClickFacebook() => _bloc.add(FacebookLogin());
   _onClickGoogle() => _bloc.add(GoogleLogin());
   _onClickApple() => _bloc.add(AppleLogin());
   _onClickSignUp() => Navigator.of(context).pushNamed(routeAuthTermPage, arguments: {"needRegister": true});
@@ -195,8 +194,6 @@ extension on _LoginPageState {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        oAuthButton(Assets.ic_login_facebook, _onClickFacebook),
-        const SizedBox(width: 6),
         oAuthButton(Assets.ic_login_google, _onClickGoogle),
         if(Platform.isIOS) const SizedBox(width: 6),
         if(Platform.isIOS) oAuthButton(Assets.ic_login_apple, _onClickApple),
