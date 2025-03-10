@@ -91,27 +91,24 @@ extension FormattedDateTime on DateTime {
 extension TermString on String {
   String get termTitle {
     switch(this){
-      case "AGE" : return "[Required] I am 14 years old or older.";
-      case "TOS" : return "[Required] Agree to the Terms of Service";
-      case "PRIVACY" : return "[Required] Consent to the Collection and Use of Personal Information";
-      case "MARKETING" : return "[Optional] Agree to Marketing Usage";
+      case "TOS" : return "[필수] 서비스 이용 약관 동의";
+      case "PRIVACY" : return "[필수] 개인 정보 이용 약관 동의";
+      case "MARKETING" : return "[필수] 마케팅 활용 동의";
       default: return "";
     }
   }
 
   String get termName {
     switch(this){
-      case "AGE" : return "14 years old or older.";
-      case "TOS" : return "Terms of Service";
-      case "PRIVACY" : return "Use of Personal Information";
-      case "MARKETING" : return "Marketing Usage";
+      case "TOS" : return "서비스 이용";
+      case "PRIVACY" : return "개인 정보 이용";
+      case "MARKETING" : return "마케팅 활용";
       default: return "";
     }
   }
 
   String get termContent {
     switch(this){
-      case "AGE" : return TermsText.ageText;
       case "TOS" : return TermsText.tosText;
       case "PRIVACY" : return TermsText.privacyText;
       case "MARKETING" : return TermsText.marketingText;

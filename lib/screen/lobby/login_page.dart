@@ -230,7 +230,7 @@ extension on _LoginPageState {
           onTap: _onClickSignUp,
           child: Container(
             color: Colors.transparent,
-            child: const BasicText("회원가입하기", 14, 18, FontWeight.w500, textColor: AppColors.primary),
+            child: const BasicText("회원가입", 14, 18, FontWeight.w500, textColor: AppColors.primary),
           ),
         )
       ],

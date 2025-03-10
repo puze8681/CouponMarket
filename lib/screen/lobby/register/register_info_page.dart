@@ -126,22 +126,22 @@ extension on _RegisterInfoPageState {
   }
 
   Widget get titleWidget {
-    return const BasicText("Please enter your\ninformation.", 20, 24, FontWeight.w600, textColor: Color(0xff30333E));
+    return const BasicText("정보를\n입력해주세요", 20, 24, FontWeight.w600, textColor: Color(0xff30333E));
   }
 
   Widget get inputWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        inputBox("Please enter your name.", nameController, false),
+        inputBox("이름을 입력해주세요", nameController, false),
         const SizedBox(height: 20),
-        inputBox("01012345678", numberController, false),
+        inputBox("전화번호를 입력해주세요", numberController, false),
       ],
     );
   }
 
   Widget get doButton {
-    return BasicButton("Next", _onClickDo, isExpanded: true, enable: isDoEnable);
+    return BasicButton("다음", _onClickDo, isExpanded: true, enable: isDoEnable);
   }
 
   Widget inputBox(String hint, TextEditingController controller, bool isObscure){

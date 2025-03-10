@@ -98,7 +98,7 @@ extension on _TermPageState {
     return const Navigation("");
   }
   Widget get titleWidget {
-    return const BasicText("Please agree to\nthe Terms of Service.", 20, 24, FontWeight.w600, textColor: Color(0xff30333E));
+    return const BasicText("이용 약관에\n동의해주세요", 20, 24, FontWeight.w600, textColor: Color(0xff30333E));
   }
 
   Widget get agreeWidget {
@@ -133,7 +133,7 @@ extension on _TermPageState {
           children: [
             AssetWidget(Assets.ic_agree_check, width: 28, height: 28, color: assetColor),
             const SizedBox(width: 4),
-            Expanded(child: BasicText("Agree to All Terms", 14, 16, FontWeight.w500, textColor: textColor)),
+            Expanded(child: BasicText("전체 이용 약관 동의", 14, 16, FontWeight.w500, textColor: textColor)),
           ],
         ),
       ),
@@ -180,6 +180,6 @@ extension on _TermPageState {
   }
 
   Widget get doneButton {
-    return BasicButton("Done", _onClickDone, isExpanded: true, enable: isDoneEnable);
+    return BasicButton("완료", _onClickDone, isExpanded: true, enable: isDoneEnable);
   }
 }

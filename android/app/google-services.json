@@ -15,7 +15,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "540834339175-609a3ms8v2pbm3a1peeeg6ki5dk5k3g3.apps.googleusercontent.com",
+          "client_id": "540834339175-7ndig1m4c2v5moatdeoiudkrcfobsupi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "kr.puze.coupon_market",
+            "certificate_hash": "97b6632911827030f7f72b47f540e627a51a468d"
+          }
+        },
+        {
+          "client_id": "540834339175-f285o4a9klkh8ogbvbe7v7sss0m2gshl.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -30,6 +38,13 @@
             {
               "client_id": "540834339175-609a3ms8v2pbm3a1peeeg6ki5dk5k3g3.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "540834339175-ts85v9pf533isudk7au1cnsiihnbp587.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "kr.puze.coupon-market"
+              }
             }
           ]
         }
@@ -44,7 +59,7 @@
       },
       "oauth_client": [
         {
-          "client_id": "540834339175-609a3ms8v2pbm3a1peeeg6ki5dk5k3g3.apps.googleusercontent.com",
+          "client_id": "540834339175-f285o4a9klkh8ogbvbe7v7sss0m2gshl.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -59,6 +74,13 @@
             {
               "client_id": "540834339175-609a3ms8v2pbm3a1peeeg6ki5dk5k3g3.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "540834339175-ts85v9pf533isudk7au1cnsiihnbp587.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "kr.puze.coupon-market"
+              }
             }
           ]
         }

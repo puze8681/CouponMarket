@@ -25,7 +25,7 @@ class FirebaseManager extends FirebaseService {
     FirebaseApp app = Firebase.apps.firstOrNull ?? await Firebase.initializeApp();
     firebaseApp = app;
     _auth = FirebaseAuth.instanceFor(app: app);
-    _firestoreInstance = FirebaseFirestore.instanceFor(app: app);
+    _firestoreInstance = FirebaseFirestore.instanceFor(app: app, databaseId: 'market');
     _storageInstance = FirebaseStorage.instance;
     return app;
   }

@@ -53,9 +53,9 @@ extension on _GuidePageState {
                   });
                 },
                 children: <Widget>[
-                  _buildPageContent(Assets.bg_guide_1),
-                  _buildPageContent(Assets.bg_guide_2),
-                  _buildPageContent(Assets.bg_guide_3),
+                  _buildPageContent("가이드 사진 1"),
+                  _buildPageContent("가이드 사진 2"),
+                  _buildPageContent("가이드 사진 3"),
                 ],
               ),
             ),
@@ -70,10 +70,12 @@ extension on _GuidePageState {
   }
 
   Widget _buildPageContent(String assets) {
-    return SizedBox(
+    return Container(
+      color: Colors.grey,
       width: 310,
       height: 464,
-      child: AssetWidget(assets),
+      alignment: Alignment.center,
+      child: Text(assets),
     );
   }
 
@@ -117,7 +119,7 @@ extension on _GuidePageState {
               borderRadius: BorderRadius.circular(6),
             ),
             alignment: Alignment.center,
-            child: Text('Login or Sign up', style: Typo.headline3.colored(AppColors.white)),
+            child: Text('시작하기', style: Typo.headline3.colored(AppColors.white)),
           ),
         )
     );
