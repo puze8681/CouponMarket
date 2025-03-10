@@ -35,11 +35,11 @@ class _LoginPageState extends State<LoginPage> {
     bool emailEmpty = email.isEmpty;
     bool passwordEmpty = password.isEmpty;
     if(emailEmpty && passwordEmpty){
-      Fluttertoast.showToast(msg: "Email and Password is empty");
+      Fluttertoast.showToast(msg: "이메일과 비밀번호를 입력해주세요");
     }else if(emailEmpty){
-      Fluttertoast.showToast(msg: "Email is empty");
+      Fluttertoast.showToast(msg: "이메일을 입력해주세요");
     }else if(passwordEmpty){
-      Fluttertoast.showToast(msg: "Password is empty");
+      Fluttertoast.showToast(msg: "비밀번호를 입력해주세요");
     }else{
       _bloc.add(DoLogin(email, password));
     }
@@ -131,15 +131,15 @@ extension on _LoginPageState {
   }
 
   Widget get logoWidget {
-    return const AssetWidget(Assets.ic_login_logo, width: 135, height: 34);
+    return const SizedBox(width: 135, height: 34);
   }
 
   Widget get inputWidget {
     return Column(
       children: [
-        inputBox("Enter your email", emailController, false),
+        inputBox("이메일을 입력해주세요", emailController, false),
         const SizedBox(height: 12),
-        inputBox("Enter your password", passwordController, true),
+        inputBox("비밀번호를 입력해주세요", passwordController, true),
       ],
     );
   }
@@ -152,11 +152,11 @@ extension on _LoginPageState {
     return Row(
       children: [
         const Spacer(),
-        findButton("Find ID", _onClickFindId),
+        findButton("이메일 찾기", _onClickFindId),
         const SizedBox(width: 8),
         Container(width: 1, height: 10, color: const Color(0xffC5C5C5)),
         const SizedBox(width: 8),
-        findButton("Find Password", _onClickFindPassword),
+        findButton("비밀번호 찾기", _onClickFindPassword),
       ],
     );
   }
@@ -166,13 +166,13 @@ extension on _LoginPageState {
       onTap: ()=>onClick.call(),
       child: Container(
         color: Colors.transparent,
-        child: BasicText(text, 12, 14, FontWeight.w400, textColor: Color(0xff696D70)),
+        child: BasicText(text, 12, 14, FontWeight.w400, textColor: const Color(0xff696D70)),
       ),
     );
   }
 
   Widget get loginButton {
-    return BasicButton("Login", _onClickLogin, isExpanded: true);
+    return BasicButton("로그인", _onClickLogin, isExpanded: true);
   }
 
   Widget get oAuthDivider {
@@ -182,7 +182,7 @@ extension on _LoginPageState {
       children: [
         Expanded(child: Container(height: 1, color: const Color(0xffE8ECF4))),
         const SizedBox(width: 18),
-        const BasicText("Or Login with", 12, 14, FontWeight.w400, textColor: Color(0xff696D70)),
+        const BasicText("간편 로그인", 12, 14, FontWeight.w400, textColor: Color(0xff696D70)),
         const SizedBox(width: 18),
         Expanded(child: Container(height: 1, color: const Color(0xffE8ECF4))),
       ],
@@ -224,13 +224,13 @@ extension on _LoginPageState {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const BasicText("Don't have an account?", 14, 18, FontWeight.w500, textColor: Color(0xff696D70)),
+        const BasicText("계정이 없으신가요?", 14, 18, FontWeight.w500, textColor: Color(0xff696D70)),
         const SizedBox(width: 4),
         GestureDetector(
           onTap: _onClickSignUp,
           child: Container(
             color: Colors.transparent,
-            child: BasicText("Sign up", 14, 18, FontWeight.w500, textColor: AppColors.primary),
+            child: const BasicText("회원가입하기", 14, 18, FontWeight.w500, textColor: AppColors.primary),
           ),
         )
       ],
