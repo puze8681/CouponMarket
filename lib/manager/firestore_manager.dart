@@ -24,7 +24,13 @@ abstract class FireStoreService {
   Future<List<String>> getCategoryList(); // category
   Future<void> deleteCategory(String category); // category
 
-  Future<(List<Store>, DocumentSnapshot?)> getStoreList(int limit, DocumentSnapshot? lastDocument); // result
+  Future<(List<Store>, DocumentSnapshot?)> getStoreList({
+    required int limit,
+    DocumentSnapshot? lastDocument,
+    int? cityId,
+    int? districtId,
+    List<int>? categories,
+  }); // result
   
   Future<String> uploadImage(File image);
   Future<void> postUserCoupon(UserCoupon coupon); // result
@@ -148,16 +154,42 @@ class FireStoreManager extends FireStoreService {
   }
 
   @override
-  Future<(List<Store>, DocumentSnapshot?)> getStoreList(int limit, DocumentSnapshot? lastDocument) async {
+  Future<(List<Store>, DocumentSnapshot?)> getStoreList({
+    required int limit,
+    DocumentSnapshot? lastDocument,
+    int? cityId,
+    int? districtId,
+    List<int>? categories,
+  }) async {
     // 쿼리 시작
-    Query query = instance
+    Query query = FirebaseFirestore.instance
         .collection('store')
-        .orderBy('createdAt', descending: true)
-        .limit(limit);
+        .orderBy('createdAt', descending: true);
+
+    // 필터 적용
+    if (cityId != null) {
+      query = query.where('city', isEqualTo: cityId);
+    }
+
+    if (districtId != null) {
+      query = query.where('district', isEqualTo: districtId);
+    }
+
+    // 카테고리 필터 적용
+    if (categories != null && categories.isNotEmpty) {
+      final limitedCategories = categories.length > 10
+          ? categories.sublist(0, 10)
+          : categories;
+
+      query = query.where('category', arrayContainsAny: limitedCategories);
+    }
+
+    // 결과 제한
+    query = query.limit(limit);
 
     // 이전 페이지가 있는 경우
     if (lastDocument != null) {
-      query = query.startAfter([lastDocument]);
+      query = query.startAfterDocument(lastDocument);
     }
 
     // 데이터 가져오기
@@ -165,16 +197,20 @@ class FireStoreManager extends FireStoreService {
 
     // 결과가 없는 경우 빈 리스트 반환
     if (querySnapshot.docs.isEmpty) {
-      return (List<Store>.from([]), null);
+      return ([] as List<Store>, null);
     }
 
-    // 문서들을 Notification 객체로 변환
+    // 문서들을 Store 객체로 변환
     final resultList = querySnapshot.docs.map((doc) {
-      final data = doc.data() as Map<String, dynamic>;
-      return Store.fromJson(data);
+      return Store.fromFirestore(doc);
     }).toList();
 
-    return (resultList, querySnapshot.docs.lastOrNull);
+    // 마지막 문서 찾기
+    final lastDoc = querySnapshot.docs.isNotEmpty
+        ? querySnapshot.docs.last
+        : null;
+
+    return (resultList, lastDoc);
   }
   
 

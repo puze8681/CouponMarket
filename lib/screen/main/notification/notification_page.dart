@@ -99,7 +99,7 @@ extension on _NotificationPageState {
   }
 
   Widget get navigation {
-    return const Navigation("Notifications");
+    return const Navigation("알림함");
   }
 
   Widget notificationWidget(List<NotificationData> notificationList) {

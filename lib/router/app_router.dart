@@ -12,6 +12,7 @@ import 'package:coupon_market/screen/lobby/splash_page.dart';
 import 'package:coupon_market/screen/main/notification/notification_page.dart';
 import 'package:coupon_market/screen/main/profile/change_pw_page.dart';
 import 'package:coupon_market/screen/main/profile/edit_info_page.dart';
+import 'package:coupon_market/screen/main/profile/profile_page.dart';
 import 'package:coupon_market/screen/main/profile/profile_term_page.dart';
 import 'package:flutter/material.dart';
 
@@ -65,6 +66,7 @@ Route getRoute(RouteSettings settings) {
     case routeChangePwPage: return MaterialPageRoute(builder: (_) => const ChangePwPage());
     case routeProfileTermPage: return MaterialPageRoute(builder: (_) => ProfileTermPage(title: arg['title'], content: arg['content']));
     case routeNotificationPage: return MaterialPageRoute(builder: (_) => const NotificationPage());
+    case routeProfilePage: return MaterialPageRoute(builder: (_) => const ProfilePage());
     default:
       throw Exception('Invalid route: ${settings.name}');
   }

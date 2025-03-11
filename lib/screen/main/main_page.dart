@@ -1,18 +1,18 @@
 import 'package:coupon_market/bloc/main/main_bloc.dart';
+import 'package:coupon_market/component/basic/basic_text.dart';
 import 'package:coupon_market/component/common/asset_widget.dart';
-import 'package:coupon_market/component/modal/default_modal.dart';
-import 'package:coupon_market/component/modal/text_modal.dart';
+import 'package:coupon_market/component/filter/category_filter_bottom_sheet.dart';
+import 'package:coupon_market/component/filter/filter_options.dart';
+import 'package:coupon_market/component/filter/location_filter_bottom_sheet.dart';
+import 'package:coupon_market/component/indicator_widget.dart';
 import 'package:coupon_market/constant/assets.dart';
 import 'package:coupon_market/constant/colors.dart';
-import 'package:coupon_market/screen/main/home/home_page.dart';
-import 'package:coupon_market/screen/main/main_tab_item.dart';
-import 'package:coupon_market/screen/main/profile/profile_page.dart';
-import 'package:coupon_market/screen/main/store/store_page.dart';
+import 'package:coupon_market/constant/korean_constants.dart';
+import 'package:coupon_market/model/store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:coupon_market/router/app_routes.dart';
-import 'package:coupon_market/util/extensions.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -22,139 +22,335 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
-  late TabController tabController;
   final MainBloc _bloc = MainBloc();
+  final ScrollController _scrollController = ScrollController();
 
-  _onClickFab() async {
-    Navigator.pushNamed(context, routeBluetoothScanPage);
+  _onClickNotice() {
+    Navigator.pushNamed(context, routeNotificationPage);
   }
 
-  int lastTabIndex = 0;
+  _onClickProfile() {
+    Navigator.pushNamed(context, routeProfilePage);
+  }
+
+  _onClickStore(Store store) async {
+    // await Navigator.pushNamed(context, routeBluetoothResultPage, arguments: {"testResult": testResult});
+  }
+
+  _onClickFab() async {
+    //Todo 다운받은 쿠폰 바텀시트 노출
+    // Navigator.pushNamed(context, route);
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
+      _bloc.add(LoadMoreMain());
+    }
+  }
+
+  // 지역 필터 바텀시트 표시
+  void _showLocationFilter(FilterOptions currentFilterOptions) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => DraggableScrollableSheet(
+        initialChildSize: 0.75,
+        maxChildSize: 0.9,
+        minChildSize: 0.5,
+        builder: (_, controller) => LocationFilterBottomSheet(
+          initialFilterOptions: currentFilterOptions,
+          onApplyFilter: (filterOptions) {
+            _bloc.add(ApplyFilter(filterOptions));
+          },
+        ),
+      ),
+    );
+  }
+
+  // 카테고리 필터 바텀시트 표시
+  void _showCategoryFilter(FilterOptions currentFilterOptions) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => DraggableScrollableSheet(
+        initialChildSize: 0.75,
+        maxChildSize: 0.9,
+        minChildSize: 0.5,
+        builder: (_, controller) => CategoryFilterBottomSheet(
+          initialFilterOptions: currentFilterOptions,
+          onApplyFilter: (filterOptions) {
+            _bloc.add(ApplyFilter(filterOptions));
+          },
+        ),
+      ),
+    );
+  }
+
+  // 도시 이름 조회 헬퍼 메서드
+  String _getCityName(int? cityId) {
+    if (cityId == null) return '';
+    return KoreanCityConstants.cityNameMap[cityId] ?? '';
+  }
+
+  // 구/군 이름 조회 헬퍼 메서드
+  String _getDistrictName(int? districtId) {
+    if (districtId == null) return '';
+    return KoreanDistrictConstants.districtNameMap[districtId] ?? '';
+  }
+
   @override
   void initState() {
     super.initState();
-    tabController = TabController(length: 5, vsync: this);
-    tabController.addListener(() {
-      if(tabController.index == 3){
-        tabController.animateTo(lastTabIndex);
-        showModal(
-          barrierDismissible: false,
-          context: context,
-          builder: (_) {
-            return TextModal(
-              text: "The service is currently\nunder preparation. Please try\nagain later.",
-              buttonText: "Confirm",
-              onClick: ()=>Navigator.of(context).pop(),
-              canPop: false,
-            );
-          },
-        );
-      }else if(tabController.index != 2){
-        lastTabIndex = tabController.index;
-        setState(() {});
-      }else{
-        lastTabIndex = 0;
-        tabController.animateTo(0);
-      }
-    });
+    _bloc.add(InitMain());
+    _scrollController.addListener(_onScroll);
   }
 
-  _onAnimateTab(int index){
-    tabController.animateTo(index);
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    _bloc.close();
+    super.dispose();
   }
 
-  DateTime? backButtonPressedTime;
   @override
   Widget build(BuildContext context) {
-    return BlocListener(
-      bloc: _bloc,
-      listener: (_, state) {},
-      child: WillPopScope(
-        onWillPop: () async {
-          if(tabController.index == 0){
-            DateTime currentTime = DateTime.now();
-
-            bool backButton = backButtonPressedTime == null || currentTime.difference(backButtonPressedTime!) > const Duration(seconds: 3);
-
-            if (backButton) {
-              backButtonPressedTime = currentTime;
-              Fluttertoast.showToast(
-                  msg: "한번 더 클릭시 앱이 종료됩니다.",
-                  backgroundColor: AppColors.mainText.withOpacity(0.65),
-                  textColor: Colors.white);
-              return false;
+    return Scaffold(
+      floatingActionButton: _fab,
+      backgroundColor: const Color(0xffF7F9FC),
+      body: SafeArea(
+        child: BlocListener(
+          bloc: _bloc,
+          listener: (_, MainState state) {
+            if (state.message != null) {
+              Fluttertoast.showToast(msg: state.message!);
             }
-            return true;
-          }else{
-            tabController.animateTo(0);
-          }
-          return false;
-        },
-        child: Scaffold(
-          backgroundColor: const Color(0xffF7F9FC),
-          floatingActionButton: _fab,
-          floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterDocked,
-          resizeToAvoidBottomInset: false,
-          body: SafeArea(
-            child: TabBarView(
-              controller: tabController,
-              physics: const NeverScrollableScrollPhysics(),
-              children: [
-                HomePage(onAnimateTab: _onAnimateTab),
-                const StorePage(),
-                const SizedBox(),
-                const SizedBox(),
-                const ProfilePage(),
-              ],
-            ),
+          },
+          child: BlocBuilder(
+            bloc: _bloc,
+            builder: (_, MainState state) {
+              return Stack(
+                children: [
+                  Positioned.fill(
+                    child: Column(
+                      children: [
+                        navigation,
+                        filterWidget(state),
+                        storeListWidget(state.storeList),
+                      ],
+                    ),
+                  ),
+                  if (state.isLoading) const IndicatorWidget(),
+                ],
+              );
+            },
           ),
-          bottomNavigationBar: Container(
-            color: AppColors.white,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                SizedBox(
-                  height: 75 + context.bottomPadding,
-                  child: TabBar(
-                    labelPadding: EdgeInsets.zero,
-                    indicatorPadding: EdgeInsets.zero,
-                    indicatorColor: AppColors.transparent,
-                    controller: tabController,
-                    isScrollable: false,
-                    tabs: [
-                      MainTabItem(
-                        text: "Home",
-                        activeIcon: Assets.ic_tab_home_selected,
-                        inactiveIcon: Assets.ic_tab_home,
-                        isActive: tabController.index == 0,
-                      ),
-                      MainTabItem(
-                        text: "History",
-                        activeIcon: Assets.ic_tab_history_selected,
-                        inactiveIcon: Assets.ic_tab_history,
-                        isActive: tabController.index == 1,
-                      ),
-                      const SizedBox(),
-                      MainTabItem(
-                        text: "Shop",
-                        activeIcon: Assets.ic_tab_shopping_selected,
-                        inactiveIcon: Assets.ic_tab_shopping,
-                        isActive: tabController.index == 3,
-                      ),
-                      MainTabItem(
-                        text: "Profile",
-                        activeIcon: Assets.ic_tab_my_selected,
-                        inactiveIcon: Assets.ic_tab_my,
-                        isActive: tabController.index == 4,
-                      ),
-                    ],
+        ),
+      ),
+    );
+  }
+}
+
+extension on _MainPageState {
+  Widget get navigation {
+    return Container(
+      color: Colors.white,
+      width: double.infinity,
+      height: 56,
+      alignment: Alignment.centerLeft,
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Stack(
+        children: [
+          const Align(
+            alignment: Alignment.center,
+            child: BasicText("Coupon Market", 16, 20, FontWeight.w500),
+          ),
+          Align(
+            alignment: Alignment.centerRight,
+            child: Row(
+              children: [
+                const Spacer(),
+                GestureDetector(
+                  onTap: _onClickNotice,
+                  child: Container(
+                    color: Colors.transparent,
+                    child: const AssetWidget(Assets.ic_profile_notice,
+                        width: 24, height: 24),
                   ),
                 ),
+                const SizedBox(width: 16),
+                GestureDetector(
+                  onTap: _onClickProfile,
+                  child: Container(
+                    color: Colors.transparent,
+                    child: const AssetWidget(Assets.ic_tab_my,
+                        width: 28, height: 28, color: AppColors.mainText),
+                  ),
+                )
               ],
             ),
           ),
-          // floatingActionButton: _fabBtn,
-          // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        ],
+      ),
+    );
+  }
+
+  Widget filterWidget(MainState state) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Row(
+        children: [
+          // 지역 필터 버튼
+          Expanded(
+            child: GestureDetector(
+              onTap: () => _showLocationFilter(state.filterOptions),
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey[300]!),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                alignment: Alignment.center,
+                child: Text(
+                  state.filterOptions.cityId != null
+                      ? '${_getCityName(state.filterOptions.cityId)} ${state.filterOptions.districtId != null ? _getDistrictName(state.filterOptions.districtId) : ''}'
+                      : '지역으로 보기',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: 12),
+          // 카테고리 필터 버튼
+          Expanded(
+            child: GestureDetector(
+              onTap: () => _showCategoryFilter(state.filterOptions),
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey[300]!),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                alignment: Alignment.center,
+                child: Text(
+                  state.filterOptions.categories != null && state.filterOptions.categories!.isNotEmpty
+                      ? '${state.filterOptions.categories!.length}개 카테고리'
+                      : '카테고리로 보기',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget storeListWidget(List<Store> storeList){
+    if (storeList.isEmpty) {
+      return const Expanded(
+        child: Center(
+          child: Text('매장이 없습니다.'),
+        ),
+      );
+    }
+
+    return Expanded(
+      child: ListView.builder(
+        controller: _scrollController,
+        itemCount: storeList.length,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        itemBuilder: (context, index) {
+          final store = storeList[index];
+          return storeWidget(store);
+        },
+      ),
+    );
+  }
+
+  Widget storeWidget(Store store){
+    return GestureDetector(
+      onTap: () => _onClickStore(store),
+      child: Card(
+        margin: const EdgeInsets.only(bottom: 12),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Row(
+            children: [
+              // 매장 이미지
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image.network(
+                  store.image,
+                  width: 80,
+                  height: 80,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) => Container(
+                    width: 80,
+                    height: 80,
+                    color: Colors.grey[300],
+                    child: const Icon(Icons.store, color: Colors.grey),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              // 매장 정보
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      store.name,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      '${store.tCity} ${store.tDistrict}',
+                      style: TextStyle(
+                        color: Colors.grey[600],
+                        fontSize: 13,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      store.tCategory,
+                      style: TextStyle(
+                        color: Colors.grey[600],
+                        fontSize: 13,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              // 쿠폰 정보
+              Column(
+                children: [
+                  Text(
+                    '${store.couponCount}',
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue,
+                    ),
+                  ),
+                  const Text(
+                    '쿠폰',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.blue,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -173,7 +369,8 @@ extension on _MainPageState {
           color: AppColors.primary,
           borderRadius: BorderRadius.circular(100),
         ),
-        child: const AssetWidget(Assets.ic_fab_plus, width: 30, height: 30),
+        child: const AssetWidget(Assets.ic_fab_coupon,
+            width: 30, height: 30, color: Colors.white),
       ),
     );
   }

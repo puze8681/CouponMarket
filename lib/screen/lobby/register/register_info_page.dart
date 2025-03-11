@@ -49,8 +49,8 @@ class _RegisterInfoPageState extends State<RegisterInfoPage> {
       context: context,
       builder: (_) {
         return TextModal(
-          text: "Your registration is complete!",
-          buttonText: "Done",
+          text: "회원가입이 완료되었습니다!",
+          buttonText: "확인",
           onClick: _onClickDone,
         );
       },

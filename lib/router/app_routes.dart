@@ -18,19 +18,16 @@ const String routeTermDetailPage = "routeTermDetailPage";
 const String routeMainPage = "routeMainPage";
 
 /// Profile
+const String routeMyCouponPage = "routeMyCouponPage";
 const String routeEditInfoPage = "routeEditInfoPage";
 const String routeChangePwPage = "routeChangePwPage";
 const String routeProfileTermPage = "routeProfileTermPage";
-
-/// Bluetooth
-const String routeBluetoothScanPage = "routeBluetoothScanPage";
-const String routeBluetoothSelectPage = "routeBluetoothSelectPage";
-const String routeBluetoothConnectPage = "routeBluetoothConnectPage";
-const String routeBluetoothTestPage = "routeBluetoothTestPage";
-const String routeBluetoothResultPage = "routeBluetoothResultPage";
 
 /// Parameter
 const String routeParameterDetail = "routeParameterDetail";
 
 /// Notification
 const String routeNotificationPage = "routeNotificationPage";
+
+/// Profile
+const String routeProfilePage = "routeProfilePage";

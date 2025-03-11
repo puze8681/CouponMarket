@@ -43,7 +43,7 @@ class _EditInfoPageState extends State<EditInfoPage> {
   }
 
   _onShowDone(){
-    Fluttertoast.showToast(msg: "Successfully updated");
+    Fluttertoast.showToast(msg: "정보가 수정되었습니다!");
   }
 
   @override
@@ -113,7 +113,7 @@ extension on _EditInfoPageState {
   }
 
   Widget get navigationWidget {
-    return const Navigation("Edit My Information");
+    return const Navigation("내 정보 수정");
   }
 
   Widget get emailWidget {
@@ -135,7 +135,7 @@ extension on _EditInfoPageState {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        inputBox("Please enter your name.", nameController, false),
+        inputBox("이름을 입력해주세요", nameController, false),
         const SizedBox(height: 20),
         inputBox("01012345678", numberController, false),
       ],
@@ -147,6 +147,6 @@ extension on _EditInfoPageState {
   }
 
   Widget get doButton {
-    return BasicButton("Edit", _onClickDo, isExpanded: true, enable: isDoEnable);
+    return BasicButton("수정", _onClickDo, isExpanded: true, enable: isDoEnable);
   }
 }

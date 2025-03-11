@@ -129,19 +129,19 @@ extension on _ProfilePageState {
                       infoWidget,
                       const SizedBox(height: 45),
                       divider,
-                      buttonWidget("Edit My Information", routeEditInfoPage),
+                      buttonWidget("내 쿠폰", routeMyCouponPage),
                       divider,
-                      buttonWidget("Change Password", routeChangePwPage),
+                      buttonWidget("내 정보 수정", routeEditInfoPage),
                       divider,
-                      buttonWidget("Parameter Details", routeParameterDetail),
+                      buttonWidget("비밀번호 변경", routeChangePwPage),
                       divider,
-                      buttonWidget("Terms of Service", routeProfileTermPage, args: {
-                        "title": "Terms of Service",
+                      buttonWidget("서비스이용약관", routeProfileTermPage, args: {
+                        "title": "서비스이용약관",
                         "content": TermsText.tosText,
                       }),
                       divider,
-                      buttonWidget("Privacy Policy", routeProfileTermPage, args: {
-                        "title": "Privacy Policy",
+                      buttonWidget("개인정보처리방침", routeProfileTermPage, args: {
+                        "title": "개인정보처리방침",
                         "content": TermsText.privacyText,
                       }),
                       const Spacer(),
@@ -160,7 +160,7 @@ extension on _ProfilePageState {
   }
 
   Widget get navigationWidget {
-    return const Navigation("Profile", isBackButton: false);
+    return const Navigation("프로필");
   }
 
   Widget get infoWidget {
@@ -174,8 +174,8 @@ extension on _ProfilePageState {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const BasicText("Hello, ", 14, 16, FontWeight.w400, textColor: Color(0xff30333E)),
                   BasicText(firebaseManager.auth.currentUser?.displayName ?? "", 14, 18, FontWeight.w500, textColor: const Color(0xff30333E)),
+                  const BasicText("님, 안녕하세요!", 14, 16, FontWeight.w400, textColor: Color(0xff30333E)),
                 ],
               ),
               const SizedBox(height: 4),
@@ -192,7 +192,7 @@ extension on _ProfilePageState {
               color: const Color(0xffEFF4FF),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: const BasicText("Log out", 12, 14, FontWeight.w400, textColor: Color(0xff498AFF)),
+            child: const BasicText("로그아웃", 12, 14, FontWeight.w400, textColor: Color(0xff498AFF)),
           ),
         ),
         const SizedBox(width: 16),
@@ -228,7 +228,7 @@ extension on _ProfilePageState {
            ),
          ),
        ),
-       child: const BasicText("Delete account", 12, 15, FontWeight.w400, textColor: Color(0xff898989)),
+       child: const BasicText("회원탈퇴", 12, 15, FontWeight.w400, textColor: Color(0xff898989)),
      ),
     );
   }

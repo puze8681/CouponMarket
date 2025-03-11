@@ -98,14 +98,14 @@ extension on _ChangePwPageState {
   }
 
   Widget get navigationWidget {
-    return const Navigation("Change Password");
+    return const Navigation("비밀번호 변경");
   }
 
   Widget get inputWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        inputBox("Please enter your email.", emailController, false),
+        inputBox("이메일을 입력해주세요.", emailController, false),
       ],
     );
   }
@@ -115,6 +115,6 @@ extension on _ChangePwPageState {
   }
 
   Widget get doButton {
-    return BasicButton("Change", _onClickDo, isExpanded: true, enable: isDoEnable);
+    return BasicButton("변경", _onClickDo, isExpanded: true, enable: isDoEnable);
   }
 }

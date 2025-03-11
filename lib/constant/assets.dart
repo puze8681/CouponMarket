@@ -28,6 +28,7 @@ class Assets {
   static const ic_tab_shopping = 'main/ic_shopping.svg';
   static const ic_tab_shopping_selected = 'main/ic_shopping_selected.svg';
   static const ic_fab_plus = 'main/ic_fab_plus.svg';
+  static const ic_fab_coupon = 'main/ic_fab_coupon.svg';
 
   /// Home
   static const bg_home_header = 'home/bg_header.png';
