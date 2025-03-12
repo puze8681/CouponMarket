@@ -1,6 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 const AUTH_TOKEN = "AUTH_TOKEN";
+const SAVED_STORE_IDS = "SAVED_STORE_IDS";
 
 class StorageException implements Exception {
   String msg;
@@ -36,5 +37,24 @@ class LocalStorage {
   Future<void> removeToken() async {
     var pref = await _pref;
     pref.remove(AUTH_TOKEN);
+  }
+
+  Future<List<String>> getSavedStoreIds() async {
+    var pref = await _pref;
+    var list = pref.getStringList(SAVED_STORE_IDS) ?? [] as List<String>;
+    return list;
+  }
+  Future<bool> saveStoreId(String storeId) async {
+    var pref = await _pref;
+    var list = pref.getStringList(SAVED_STORE_IDS) ?? [] as List<String>;
+    if(list.contains(storeId)){
+      list.remove(storeId);
+      pref.setStringList(SAVED_STORE_IDS, list);
+      return false;
+    }else{
+      list.add(storeId);
+      pref.setStringList(SAVED_STORE_IDS, list);
+      return true;
+    }
   }
 }

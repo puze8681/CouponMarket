@@ -6,9 +6,11 @@ import 'package:coupon_market/component/filter/filter_options.dart';
 import 'package:coupon_market/component/filter/location_filter_bottom_sheet.dart';
 import 'package:coupon_market/component/indicator_widget.dart';
 import 'package:coupon_market/constant/assets.dart';
+import 'package:coupon_market/constant/category_constants.dart';
 import 'package:coupon_market/constant/colors.dart';
 import 'package:coupon_market/constant/korean_constants.dart';
-import 'package:coupon_market/model/store.dart';
+import 'package:coupon_market/model/coupon.dart';
+import 'package:coupon_market/screen/main/coupon/downloaded_coupons_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:coupon_market/router/app_routes.dart';
@@ -33,13 +35,19 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
     Navigator.pushNamed(context, routeProfilePage);
   }
 
-  _onClickStore(Store store) async {
-    // await Navigator.pushNamed(context, routeBluetoothResultPage, arguments: {"testResult": testResult});
+  _onClickCoupon(Coupon coupon) async {
+    Navigator.pushNamed(context, routeCouponPage, arguments: {"coupon": coupon});
   }
 
   _onClickFab() async {
-    //Todo 다운받은 쿠폰 바텀시트 노출
-    // Navigator.pushNamed(context, route);
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      isDismissible: true,
+      enableDrag: true,
+      builder: (context) => const DownloadedCouponsBottomSheet(),
+    );
   }
 
   void _onScroll() {
@@ -137,7 +145,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                       children: [
                         navigation,
                         filterWidget(state),
-                        storeListWidget(state.storeList),
+                        couponListWidget(state.couponList),
                       ],
                     ),
                   ),
@@ -235,7 +243,7 @@ extension on _MainPageState {
                 alignment: Alignment.center,
                 child: Text(
                   state.filterOptions.categories != null && state.filterOptions.categories!.isNotEmpty
-                      ? '${state.filterOptions.categories!.length}개 카테고리'
+                      ? state.filterOptions.categories!.map((category) => FoodCategoryConstants.getCategoryName(category)).join(", ")
                       : '카테고리로 보기',
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
@@ -247,8 +255,8 @@ extension on _MainPageState {
     );
   }
 
-  Widget storeListWidget(List<Store> storeList){
-    if (storeList.isEmpty) {
+  Widget couponListWidget(List<Coupon> couponList){
+    if (couponList.isEmpty) {
       return const Expanded(
         child: Center(
           child: Text('매장이 없습니다.'),
@@ -259,19 +267,19 @@ extension on _MainPageState {
     return Expanded(
       child: ListView.builder(
         controller: _scrollController,
-        itemCount: storeList.length,
+        itemCount: couponList.length,
         padding: const EdgeInsets.symmetric(horizontal: 16),
         itemBuilder: (context, index) {
-          final store = storeList[index];
-          return storeWidget(store);
+          final coupon = couponList[index];
+          return couponWidget(coupon);
         },
       ),
     );
   }
 
-  Widget storeWidget(Store store){
+  Widget couponWidget(Coupon coupon){
     return GestureDetector(
-      onTap: () => _onClickStore(store),
+      onTap: () => _onClickCoupon(coupon),
       child: Card(
         margin: const EdgeInsets.only(bottom: 12),
         shape: RoundedRectangleBorder(
@@ -285,7 +293,7 @@ extension on _MainPageState {
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
                 child: Image.network(
-                  store.image,
+                  coupon.image,
                   width: 80,
                   height: 80,
                   fit: BoxFit.cover,
@@ -293,7 +301,7 @@ extension on _MainPageState {
                     width: 80,
                     height: 80,
                     color: Colors.grey[300],
-                    child: const Icon(Icons.store, color: Colors.grey),
+                    child: const Icon(Icons.airplane_ticket_rounded, color: Colors.grey),
                   ),
                 ),
               ),
@@ -304,7 +312,7 @@ extension on _MainPageState {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      store.name,
+                      coupon.storeName,
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -312,7 +320,7 @@ extension on _MainPageState {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      '${store.tCity} ${store.tDistrict}',
+                      '${coupon.tCity} ${coupon.tDistrict}',
                       style: TextStyle(
                         color: Colors.grey[600],
                         fontSize: 13,
@@ -320,7 +328,7 @@ extension on _MainPageState {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      store.tCategory,
+                      coupon.tCategory,
                       style: TextStyle(
                         color: Colors.grey[600],
                         fontSize: 13,
@@ -333,7 +341,7 @@ extension on _MainPageState {
               Column(
                 children: [
                   Text(
-                    '${store.couponCount}',
+                    '${coupon.stock}',
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,

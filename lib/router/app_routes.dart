@@ -31,3 +31,6 @@ const String routeNotificationPage = "routeNotificationPage";
 
 /// Profile
 const String routeProfilePage = "routeProfilePage";
+
+/// Coupon
+const String routeCouponPage = "routeCouponPage";

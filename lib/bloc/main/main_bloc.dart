@@ -1,8 +1,8 @@
 import 'package:coupon_market/component/filter/filter_options.dart';
-import 'package:coupon_market/manager/firestore_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:coupon_market/model/store.dart';
-import 'package:coupon_market/model/store_dummy.dart';
+import 'package:coupon_market/manager/firestore_manager.dart';
+import 'package:coupon_market/model/coupon.dart';
+import 'package:coupon_market/model/coupon_dummy.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 // 이벤트 정의
@@ -17,14 +17,14 @@ class ResetFilter extends MainEvent {}
 
 // 상태 정의
 class MainState {
-  final List<Store> storeList;
+  final List<Coupon> couponList;
   final bool isLoading;
   final String? message;
   final FilterOptions filterOptions;
   final bool isFiltered; // 필터가 적용되었는지 여부
 
   MainState(
-      this.storeList, {
+      this.couponList, {
         this.isLoading = false,
         this.message,
         this.filterOptions = const FilterOptions(),
@@ -33,15 +33,15 @@ class MainState {
 
   // 복사본 생성 메서드
   MainState copyWith({
-    List<Store>? storeList,
+    List<Coupon>? couponList,
     bool? isLoading,
     String? message,
     FilterOptions? filterOptions,
     bool? isFiltered,
   }) {
     return MainState(
-      // storeList ?? this.storeList,
-      StoreDummyData.getDummyStores(),
+      // couponList ?? this.couponList,
+      CouponDummyData.getDummyCoupons(),
       isLoading: isLoading ?? this.isLoading,
       message: message,
       filterOptions: filterOptions ?? this.filterOptions,
@@ -64,23 +64,23 @@ class MainBloc extends Bloc<MainEvent, MainState> {
 
   Future<void> _onInit(InitMain event, Emitter<MainState> emit) async {
     try {
-      emit(state.copyWith(storeList: [], isLoading: true));
+      emit(state.copyWith(couponList: [], isLoading: true));
 
-      final (storeList, documentSnapshot) = await _loadStores(
+      final (couponList, documentSnapshot) = await _loadCoupons(
         limit: 10,
         filterOptions: state.filterOptions,
       );
 
       lastDocument = documentSnapshot;
-      isLastPage = storeList.length < 10;
+      isLastPage = couponList.length < 10;
 
       emit(state.copyWith(
-        storeList: storeList,
+        couponList: couponList,
         isLoading: false,
       ));
     } catch (e) {
       emit(state.copyWith(
-        storeList: [],
+        couponList: [],
         isLoading: false,
         message: e.toString(),
       ));
@@ -93,19 +93,19 @@ class MainBloc extends Bloc<MainEvent, MainState> {
       try {
         emit(state.copyWith(isLoading: true));
 
-        final (storeList, documentSnapshot) = await _loadStores(
+        final (couponList, documentSnapshot) = await _loadCoupons(
           limit: 10,
           lastDocument: lastDocument,
           filterOptions: state.filterOptions,
         );
 
         lastDocument = documentSnapshot;
-        isLastPage = storeList.length < 10;
+        isLastPage = couponList.length < 10;
 
-        List<Store> newStoreList = [...state.storeList, ...storeList];
+        List<Coupon> newCouponList = [...state.couponList, ...couponList];
 
         emit(state.copyWith(
-          storeList: newStoreList,
+          couponList: newCouponList,
           isLoading: false,
         ));
       } catch (e) {
@@ -125,27 +125,27 @@ class MainBloc extends Bloc<MainEvent, MainState> {
       isLastPage = false;
 
       emit(state.copyWith(
-        storeList: [],
+        couponList: [],
         isLoading: true,
         filterOptions: event.filterOptions,
         isFiltered: event.filterOptions.hasFilter,
       ));
 
-      final (storeList, documentSnapshot) = await _loadStores(
+      final (couponList, documentSnapshot) = await _loadCoupons(
         limit: 10,
         filterOptions: event.filterOptions,
       );
 
       lastDocument = documentSnapshot;
-      isLastPage = storeList.length < 10;
+      isLastPage = couponList.length < 10;
 
       emit(state.copyWith(
-        storeList: storeList,
+        couponList: couponList,
         isLoading: false,
       ));
     } catch (e) {
       emit(state.copyWith(
-        storeList: [],
+        couponList: [],
         isLoading: false,
         message: e.toString(),
       ));
@@ -158,12 +158,12 @@ class MainBloc extends Bloc<MainEvent, MainState> {
   }
 
   // 매장 목록 로드 메서드 (필터 옵션 적용)
-  Future<(List<Store>, DocumentSnapshot?)> _loadStores({
+  Future<(List<Coupon>, DocumentSnapshot?)> _loadCoupons({
     required int limit,
     DocumentSnapshot? lastDocument,
     required FilterOptions filterOptions,
   }) async {
-    return fireStoreManager.getStoreList(
+    return fireStoreManager.getCouponList(
       limit: limit,
       lastDocument: lastDocument,
       cityId: filterOptions.cityId,

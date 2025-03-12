@@ -10,6 +10,7 @@ abstract class AuthService {
   Future<void> setUser(User user);
   void setNumber(String number);
   User get user;
+  String get userId;
   String get number;
   Future<void> logOut(String message);
 }
@@ -41,6 +42,11 @@ class AuthManager extends AuthService {
       return mUser!;
     }
     throw Exception("로그인이 필요합니다.");
+  }
+
+  @override
+  String get userId {
+    return user.uid;
   }
 
   @override

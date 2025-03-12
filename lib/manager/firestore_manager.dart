@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:coupon_market/manager/firebase_manager.dart';
 import 'package:coupon_market/manager/auth_manager.dart';
+import 'package:coupon_market/model/coupon.dart';
 import 'package:coupon_market/model/notification_data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coupon_market/model/store.dart';
@@ -31,9 +32,18 @@ abstract class FireStoreService {
     int? districtId,
     List<int>? categories,
   }); // result
+  Future<Store?> getStore({required String storeId}); // result
+  Future<(List<Coupon>, DocumentSnapshot?)> getCouponList({
+    required int limit,
+    DocumentSnapshot? lastDocument,
+    int? cityId,
+    int? districtId,
+    List<int>? categories,
+  }); // r
   
   Future<String> uploadImage(File image);
-  Future<void> postUserCoupon(UserCoupon coupon); // result
+  Future<String?> useCoupon(Coupon coupon); // result
+  Future<String?> downloadCoupon(Coupon coupon); // result
   Future<UserCoupon?> getUserCoupon(String id); // result
   Future<(List<UserCoupon>, DocumentSnapshot?)> getUserCouponList(int limit, DocumentSnapshot? lastDocument); // result
   Future<void> patchUserCoupon(UserCoupon result); // result
@@ -212,7 +222,88 @@ class FireStoreManager extends FireStoreService {
 
     return (resultList, lastDoc);
   }
-  
+  @override
+  Future<Store?> getStore({required String storeId}) async {
+    try {
+      // Firestore에서 매장 문서 조회
+      final DocumentSnapshot storeDoc = await FirebaseFirestore.instance
+          .collection('store')
+          .doc(storeId)
+          .get();
+
+      // 문서가 존재하지 않는 경우 null 반환
+      if (!storeDoc.exists) {
+        return null;
+      }
+
+      // 문서가 존재하면 Store 객체로 변환하여 반환
+      return Store.fromFirestore(storeDoc);
+    } catch (e) {
+      // 오류 발생 시 로그 기록
+      print('Error fetching store: $e');
+      return null;
+    }
+  }
+
+  @override
+  Future<(List<Coupon>, DocumentSnapshot?)> getCouponList({
+    required int limit,
+    DocumentSnapshot? lastDocument,
+    int? cityId,
+    int? districtId,
+    List<int>? categories,
+  }) async {
+    // 쿼리 시작
+    Query query = instance
+        .collection('coupon')
+        .orderBy('createdAt', descending: true);
+
+    // 필터 적용
+    if (cityId != null) {
+      query = query.where('city', isEqualTo: cityId);
+    }
+
+    if (districtId != null) {
+      query = query.where('district', isEqualTo: districtId);
+    }
+
+    // 카테고리 필터 적용
+    if (categories != null && categories.isNotEmpty) {
+      final limitedCategories = categories.length > 10
+          ? categories.sublist(0, 10)
+          : categories;
+
+      query = query.where('category', arrayContainsAny: limitedCategories);
+    }
+
+    // 결과 제한
+    query = query.limit(limit);
+
+    // 이전 페이지가 있는 경우
+    if (lastDocument != null) {
+      query = query.startAfterDocument(lastDocument);
+    }
+
+    // 데이터 가져오기
+    final querySnapshot = await query.get();
+
+    // 결과가 없는 경우 빈 리스트 반환
+    if (querySnapshot.docs.isEmpty) {
+      return ([] as List<Coupon>, null);
+    }
+
+    // 문서들을 Coupon 객체로 변환
+    final resultList = querySnapshot.docs.map((doc) {
+      return Coupon.fromFirestore(doc);
+    }).toList();
+
+    // 마지막 문서 찾기
+    final lastDoc = querySnapshot.docs.isNotEmpty
+        ? querySnapshot.docs.last
+        : null;
+
+    return (resultList, lastDoc);
+  }
 
   @override
   Future<String> uploadImage(File image) async {
@@ -239,13 +330,87 @@ class FireStoreManager extends FireStoreService {
   }
 
   @override
-  Future<void> postUserCoupon(UserCoupon coupon) async {
-    await dataCollection.doc(authManager.user.uid).collection("coupon").doc(coupon.id).set(coupon.toJson());
+  // 쿠폰 사용 함수 (로직 업데이트)
+  Future<String?> useCoupon(Coupon coupon) async {
+    try {
+      // 트랜잭션 시작
+      return await instance.runTransaction<String?>((transaction) async {
+        // 1. 쿠폰 재고 확인
+        final couponDocRef = instance.collection('coupon').doc(coupon.id);
+        final couponDoc = await transaction.get(couponDocRef);
+
+        if (!couponDoc.exists) {
+          return '존재하지 않는 쿠폰입니다.';
+        }
+
+        // 쿠폰 데이터 가져오기
+        final couponData = couponDoc.data() as Map<String, dynamic>;
+        final currentStock = couponData['stock'] as int;
+
+        // 재고 확인
+        if (currentStock <= 0) {
+          return '쿠폰 재고가 소진되었습니다.';
+        }
+
+        // 쿠폰 만료 여부 확인
+        final now = DateTime.now();
+        if (now.isAfter(coupon.useEndAt)) {
+          return '만료된 쿠폰입니다.';
+        }
+
+        if (now.isBefore(coupon.useStartAt)) {
+          return '아직 사용 가능한 기간이 아닙니다.';
+        }
+
+        // 2. 쿠폰 재고 감소
+        transaction.update(couponDocRef, {'stock': currentStock - 1});
+
+        // 3. 사용자의 쿠폰 소유 여부 확인
+        final userCouponQuery = await userCollection.doc(authManager.userId)
+            .collection('coupons')
+            .where('couponId', isEqualTo: coupon.id)
+            .limit(1)
+            .get();
+
+        // 사용 내역을 저장할 참조
+        final userCouponDocRef = userCollection.doc(authManager.userId).collection('coupons').doc();
+
+        if (userCouponQuery.docs.isNotEmpty) { // 4. UserCoupon이 존재하는 경우
+          final userCouponDoc = userCouponQuery.docs.first;
+          final userCouponData = userCouponDoc.data();
+          final userCoupon = UserCoupon.fromJson(userCouponData);
+          transaction.set(userCouponDocRef, userCoupon.use().toJson());
+        } else {  // 5. UserCoupon이 존재하지 않는 경우 Coupon으로부터 새 UserCoupon 생성 후 use() 호출하여 History에 저장
+          transaction.set(userCouponDocRef, coupon.download.use().toJson());
+        }
+
+        // 성공 시 null 반환 (에러 없음)
+        return null;
+      });
+    } catch (e) {
+      return '쿠폰 사용 중 오류가 발생했습니다: ${e.toString()}';
+    }
+  }
+
+  @override
+  Future<String?> downloadCoupon(Coupon coupon) async {
+    try{
+      final couponRef = dataCollection.doc(authManager.userId).collection("coupons").doc(coupon.id);
+      final existingDoc = await couponRef.get();
+      if (existingDoc.exists) {
+        return "이미 발급된 쿠폰입니다"; // 이미 다운로드한 쿠폰
+      }else{
+        await couponRef.set(coupon.download.toJson());
+        return null;
+      }
+    }catch (e) {
+      return "오류가 발생했습니다. 다시 시도해주세요 (${e.toString()})";
+    }
   }
 
   @override
   Future<UserCoupon?> getUserCoupon(String id) async {
-    var doc = await dataCollection.doc(authManager.user.uid).collection("coupon").doc(id).get();
+    var doc = await dataCollection.doc(authManager.user.uid).collection("coupons").doc(id).get();
     if(doc.exists){
       final data = doc.data() as Map<String, dynamic>;
       return UserCoupon.fromJson(data);
@@ -259,7 +424,7 @@ class FireStoreManager extends FireStoreService {
     // 쿼리 시작
     Query query = dataCollection
         .doc(authManager.user.uid)
-        .collection('coupon')
+        .collection('coupons')
         .orderBy('createdAt', descending: true)
         .limit(limit);
 
