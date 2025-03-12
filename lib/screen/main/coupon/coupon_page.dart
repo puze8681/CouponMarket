@@ -3,13 +3,12 @@ import 'package:coupon_market/component/basic/basic_text.dart';
 import 'package:coupon_market/component/common/asset_widget.dart';
 import 'package:coupon_market/component/indicator_widget.dart';
 import 'package:coupon_market/constant/assets.dart';
-import 'package:coupon_market/constant/colors.dart';
 import 'package:coupon_market/model/coupon.dart';
 import 'package:coupon_market/model/store.dart';
+import 'package:coupon_market/screen/main/coupon/coupon_pin_modal.dart';
 import 'package:coupon_market/util/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:coupon_market/router/app_routes.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class CouponPage extends StatefulWidget {
@@ -31,7 +30,17 @@ class _CouponPageState extends State<CouponPage> with TickerProviderStateMixin {
   }
 
   _onClickUse() async {
-    _bloc.add(UseCoupon());
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => CouponPinModal(
+        coupon: coupon,
+        onUse: (){
+          // _bloc.add(UseCoupon());
+        },
+      ),
+    );
   }
   _onClickDownload() async {
     _bloc.add(DownloadCoupon());
