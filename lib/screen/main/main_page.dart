@@ -1,7 +1,11 @@
+import 'package:coupon_market/component/basic/basic_text.dart';
+import 'package:coupon_market/component/common/asset_widget.dart';
 import 'package:coupon_market/component/modal/default_modal.dart';
 import 'package:coupon_market/component/modal/text_modal.dart';
 import 'package:coupon_market/constant/assets.dart';
 import 'package:coupon_market/constant/colors.dart';
+import 'package:coupon_market/router/app_routes.dart';
+import 'package:coupon_market/screen/main/coupon/coupon_page.dart';
 import 'package:coupon_market/screen/main/main_tab_item.dart';
 import 'package:coupon_market/screen/main/profile/profile_page.dart';
 import 'package:coupon_market/screen/main/store/store_page.dart';
@@ -19,6 +23,23 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   late TabController tabController;
+
+  _onClickNotice() {
+    Navigator.pushNamed(context, routeNotificationPage);
+  }
+
+  String tabTitle = "매장 목록";
+  setTabTitle(){
+    if(lastTabIndex == 1){
+      tabTitle = "쿠폰";
+    }else if(lastTabIndex == 2){
+      tabTitle = "이벤트";
+    }else if(lastTabIndex == 3){
+      tabTitle = "프로필";
+    }else {
+      tabTitle = "매장 목록";
+    }
+  }
 
   int lastTabIndex = 0;
   @override
@@ -42,6 +63,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
         );
       }else {
         lastTabIndex = tabController.index;
+        setTabTitle();
         setState(() {});
       }
     });
@@ -82,14 +104,21 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
         backgroundColor: const Color(0xffF7F9FC),
         resizeToAvoidBottomInset: false,
         body: SafeArea(
-          child: TabBarView(
-            controller: tabController,
-            physics: const NeverScrollableScrollPhysics(),
-            children: const [
-              StorePage(),
-              SizedBox(),
-              SizedBox(),
-              ProfilePage(),
+          child: Column(
+            children: [
+              navigation,
+              Expanded(
+                child: TabBarView(
+                  controller: tabController,
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: const [
+                    StorePage(),
+                    CouponPage(),
+                    SizedBox(),
+                    ProfilePage(),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
@@ -139,6 +168,39 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
         ),
         // floatingActionButton: _fabBtn,
         // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      ),
+    );
+  }
+
+  Widget get navigation {
+    return Container(
+      color: Colors.white,
+      width: double.infinity,
+      height: 56,
+      alignment: Alignment.centerLeft,
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Stack(
+        children: [
+          Align(
+            alignment: Alignment.center,
+            child: BasicText(tabTitle, 16, 20, FontWeight.w500),
+          ),
+          Align(
+            alignment: Alignment.centerRight,
+            child: Row(
+              children: [
+                const Spacer(),
+                GestureDetector(
+                  onTap: _onClickNotice,
+                  child: Container(
+                    color: Colors.transparent,
+                    child: const AssetWidget(Assets.ic_profile_notice, width: 24, height: 24),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

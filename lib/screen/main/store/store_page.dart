@@ -9,7 +9,7 @@ import 'package:coupon_market/constant/assets.dart';
 import 'package:coupon_market/constant/category_constants.dart';
 import 'package:coupon_market/constant/colors.dart';
 import 'package:coupon_market/constant/korean_constants.dart';
-import 'package:coupon_market/model/coupon.dart';
+import 'package:coupon_market/model/store.dart';
 import 'package:coupon_market/screen/main/coupon/downloaded_coupons_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -35,8 +35,8 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
     Navigator.pushNamed(context, routeProfilePage);
   }
 
-  _onClickCoupon(Coupon coupon) async {
-    Navigator.pushNamed(context, routeCouponPage, arguments: {"coupon": coupon});
+  _onClickStore(Store store) async {
+    Navigator.pushNamed(context, routeStoreDetailPage, arguments: {"store": store});
   }
 
   _onClickFab() async {
@@ -126,7 +126,7 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: _fab,
-      backgroundColor: const Color(0xffF7F9FC),
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: BlocListener(
           bloc: _bloc,
@@ -143,9 +143,8 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
                   Positioned.fill(
                     child: Column(
                       children: [
-                        navigation,
                         filterWidget(state),
-                        couponListWidget(state.couponList),
+                        storeListWidget(state.storeList),
                       ],
                     ),
                   ),
@@ -161,49 +160,6 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
 }
 
 extension on _StorePageState {
-  Widget get navigation {
-    return Container(
-      color: Colors.white,
-      width: double.infinity,
-      height: 56,
-      alignment: Alignment.centerLeft,
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Stack(
-        children: [
-          const Align(
-            alignment: Alignment.center,
-            child: BasicText("Coupon Market", 16, 20, FontWeight.w500),
-          ),
-          Align(
-            alignment: Alignment.centerRight,
-            child: Row(
-              children: [
-                const Spacer(),
-                GestureDetector(
-                  onTap: _onClickNotice,
-                  child: Container(
-                    color: Colors.transparent,
-                    child: const AssetWidget(Assets.ic_profile_notice,
-                        width: 24, height: 24),
-                  ),
-                ),
-                const SizedBox(width: 16),
-                GestureDetector(
-                  onTap: _onClickProfile,
-                  child: Container(
-                    color: Colors.transparent,
-                    child: const AssetWidget(Assets.ic_tab_my,
-                        width: 28, height: 28, color: AppColors.mainText),
-                  ),
-                )
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget filterWidget(StoreState state) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
@@ -255,8 +211,8 @@ extension on _StorePageState {
     );
   }
 
-  Widget couponListWidget(List<Coupon> couponList){
-    if (couponList.isEmpty) {
+  Widget storeListWidget(List<Store> storeList){
+    if (storeList.isEmpty) {
       return const Expanded(
         child: Center(
           child: Text('매장이 없습니다.'),
@@ -267,19 +223,19 @@ extension on _StorePageState {
     return Expanded(
       child: ListView.builder(
         controller: _scrollController,
-        itemCount: couponList.length,
+        itemCount: storeList.length,
         padding: const EdgeInsets.symmetric(horizontal: 16),
         itemBuilder: (context, index) {
-          final coupon = couponList[index];
-          return couponWidget(coupon);
+          final store = storeList[index];
+          return storeWidget(store);
         },
       ),
     );
   }
 
-  Widget couponWidget(Coupon coupon){
+  Widget storeWidget(Store store){
     return GestureDetector(
-      onTap: () => _onClickCoupon(coupon),
+      onTap: () => _onClickStore(store),
       child: Card(
         margin: const EdgeInsets.only(bottom: 12),
         shape: RoundedRectangleBorder(
@@ -293,7 +249,7 @@ extension on _StorePageState {
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
                 child: Image.network(
-                  coupon.image,
+                  store.image,
                   width: 80,
                   height: 80,
                   fit: BoxFit.cover,
@@ -312,7 +268,7 @@ extension on _StorePageState {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      coupon.storeName,
+                      store.name,
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -320,7 +276,7 @@ extension on _StorePageState {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      '${coupon.tCity} ${coupon.tDistrict}',
+                      '${store.tCity} ${store.tDistrict}',
                       style: TextStyle(
                         color: Colors.grey[600],
                         fontSize: 13,
@@ -328,7 +284,7 @@ extension on _StorePageState {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      coupon.tCategory,
+                      store.tCategory,
                       style: TextStyle(
                         color: Colors.grey[600],
                         fontSize: 13,
@@ -341,7 +297,7 @@ extension on _StorePageState {
               Column(
                 children: [
                   Text(
-                    '${coupon.stock}',
+                    '${store.couponExistCount}',
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,

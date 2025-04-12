@@ -16,6 +16,8 @@ const String routeTermDetailPage = "routeTermDetailPage";
 
 /// Main
 const String routeMainPage = "routeMainPage";
+const String routeStoreDetailPage = "routeStoreDetailPage";
+const String routeCouponPage = "routeCouponPage";
 
 /// Profile
 const String routeMyCouponPage = "routeMyCouponPage";
@@ -33,4 +35,3 @@ const String routeNotificationPage = "routeNotificationPage";
 const String routeProfilePage = "routeProfilePage";
 
 /// Coupon
-const String routeCouponPage = "routeCouponPage";

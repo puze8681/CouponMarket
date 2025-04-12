@@ -1,6 +1,5 @@
 import 'package:coupon_market/bloc/main/profile/profile_bloc.dart';
 import 'package:coupon_market/component/basic/basic_text.dart';
-import 'package:coupon_market/component/common/navigation.dart';
 import 'package:coupon_market/component/indicator_widget.dart';
 import 'package:coupon_market/component/modal/default_modal.dart';
 import 'package:coupon_market/component/modal/delete_type_modal.dart';
@@ -124,7 +123,6 @@ extension on _ProfilePageState {
                 Positioned.fill(
                   child: Column(
                     children: [
-                      navigationWidget,
                       const SizedBox(height: 24),
                       infoWidget,
                       const SizedBox(height: 45),
@@ -157,10 +155,6 @@ extension on _ProfilePageState {
         },
       ),
     );
-  }
-
-  Widget get navigationWidget {
-    return const Navigation("프로필");
   }
 
   Widget get infoWidget {

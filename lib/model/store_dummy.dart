@@ -26,6 +26,7 @@ class StoreDummyData {
         ratingCount: 187,
         couponTitle: '강남 한식당 10% 할인 쿠폰',
         couponDescription: '모든 음식 메뉴 10% 할인 (음료 및 주류 제외)',
+        couponCode: '000000',
       ),
       Store(
         id: 'store_002',
@@ -46,6 +47,7 @@ class StoreDummyData {
         ratingCount: 156,
         couponTitle: '마포 돼지갈비 5,000원 할인권',
         couponDescription: '50,000원 이상 주문 시 현장 결제 5,000원 할인',
+        couponCode: '000000',
       ),
       Store(
         id: 'store_003',
@@ -66,6 +68,7 @@ class StoreDummyData {
         ratingCount: 142,
         couponTitle: '파스타 하우스 디저트 무료 쿠폰',
         couponDescription: '2인 이상 방문 시 티라미수 1개 무료 제공',
+        couponCode: '000000',
       ),
       Store(
         id: 'store_004',
@@ -86,6 +89,7 @@ class StoreDummyData {
         ratingCount: 98,
         couponTitle: '쭈꾸미 메뉴 15% 할인권',
         couponDescription: '모든 쭈꾸미 메뉴 15% 할인 (주말 및 공휴일 제외)',
+        couponCode: '000000',
       ),
 
       // 부산 지역 매장
@@ -108,6 +112,7 @@ class StoreDummyData {
         ratingCount: 175,
         couponTitle: '해운대 횟집 소주 1병 무료',
         couponDescription: '80,000원 이상 주문 시 소주 1병 무료 제공',
+        couponCode: '000000',
       ),
       Store(
         id: 'store_006',
@@ -128,6 +133,7 @@ class StoreDummyData {
         ratingCount: 130,
         couponTitle: '부산진 돼지국밥 2,000원 할인',
         couponDescription: '돼지국밥 주문 시 2,000원 할인 (1인 1개 한정)',
+        couponCode: '000000',
       ),
 
       // 인천 지역 매장
@@ -150,6 +156,7 @@ class StoreDummyData {
         ratingCount: 120,
         couponTitle: '연수 중화요리 군만두 무료',
         couponDescription: '2인 이상 방문 시 군만두 1인분 무료 제공',
+        couponCode: '000000',
       ),
       Store(
         id: 'store_008',
@@ -170,6 +177,7 @@ class StoreDummyData {
         ratingCount: 115,
         couponTitle: '부평 치킨 생맥주 1잔 무료',
         couponDescription: '치킨 주문 시 생맥주 1잔 무료 (평일 방문 시에만 사용 가능)',
+        couponCode: '000000',
       ),
 
       // 대전 지역 매장
@@ -192,6 +200,7 @@ class StoreDummyData {
         ratingCount: 95,
         couponTitle: '대전 소고기 구이 상차림 무료',
         couponDescription: '4인 이상 방문 시 기본 상차림 1개 무료 제공',
+        couponCode: '000000',
       ),
 
       // 광주 지역 매장
@@ -214,6 +223,7 @@ class StoreDummyData {
         ratingCount: 72,
         couponTitle: '광주 카페 아메리카노 1+1',
         couponDescription: '아메리카노 주문 시 동일 음료 1잔 무료 (주말 포함)',
+        couponCode: '000000',
       ),
     ];
   }

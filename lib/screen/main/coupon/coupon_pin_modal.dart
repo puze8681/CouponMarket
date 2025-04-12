@@ -1,15 +1,15 @@
+import 'package:coupon_market/model/store.dart';
 import 'package:flutter/material.dart';
-import 'package:coupon_market/model/coupon.dart';
 
 class CouponPinModal extends StatefulWidget {
-  final Coupon coupon;
+  final Store store;
   final Function onUse;
 
   const CouponPinModal({
-    Key? key,
-    required this.coupon,
+    super.key,
+    required this.store,
     required this.onUse,
-  }) : super(key: key);
+  });
 
   @override
   State<CouponPinModal> createState() => _CouponPinModalState();
@@ -18,7 +18,7 @@ class CouponPinModal extends StatefulWidget {
 class _CouponPinModalState extends State<CouponPinModal> {
   List<String> _pinCode = [];
   final int _pinLength = 6;
-  bool _isProcessing = false;
+  final bool _isProcessing = false;
   String? _errorMessage;
 
   @override
@@ -77,11 +77,11 @@ class _CouponPinModalState extends State<CouponPinModal> {
             ),
             child: Row(
               children: [
-                if (widget.coupon.image.isNotEmpty)
+                if (widget.store.image.isNotEmpty)
                   ClipRRect(
                     borderRadius: BorderRadius.circular(8),
                     child: Image.network(
-                      widget.coupon.image,
+                      widget.store.image,
                       width: 60,
                       height: 60,
                       fit: BoxFit.cover,
@@ -109,7 +109,7 @@ class _CouponPinModalState extends State<CouponPinModal> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        widget.coupon.title,
+                        widget.store.couponTitle,
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -119,7 +119,7 @@ class _CouponPinModalState extends State<CouponPinModal> {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        widget.coupon.storeName,
+                        widget.store.name,
                         style: TextStyle(
                           fontSize: 14,
                           color: Colors.grey[700],
@@ -250,7 +250,7 @@ class _CouponPinModalState extends State<CouponPinModal> {
     final enteredPin = _pinCode.join();
 
     // 실제 쿠폰 코드와 비교 (이 부분은 실제 구현에 맞게 수정)
-    if (enteredPin != widget.coupon.code) {
+    if (enteredPin != widget.store.couponCode) {
       setState(() {
         _errorMessage = '비밀번호가 일치하지 않습니다. 다시 시도해주세요.';
         _pinCode = [];
@@ -270,11 +270,11 @@ class NumericKeypad extends StatelessWidget {
   final VoidCallback onClear;  // 전체 삭제 콜백 추가
 
   const NumericKeypad({
-    Key? key,
+    super.key,
     required this.onNumberTap,
     required this.onDelete,
     required this.onClear,  // 생성자에 추가
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
