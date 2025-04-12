@@ -15,8 +15,12 @@ class Store {
   final List<int> category;
   final int district;
   final int city;
-  final int couponCount;
-  final int userCount;
+  final int couponExistCount; // 다운(사용) 가능한 쿠폰 개수
+  final int couponUsedCount; // 사용된 쿠폰 개수
+  final int ratingTotal; // 별점
+  final int ratingCount; // 리뷰 개수
+  final String couponTitle; // 쿠폰 제목
+  final String couponDescription; // 쿠폰 설명
 
   Store({
     required this.id,
@@ -31,8 +35,12 @@ class Store {
     required this.category,
     required this.district,
     required this.city,
-    required this.couponCount,
-    required this.userCount,
+    required this.couponExistCount,
+    required this.couponUsedCount,
+    required this.ratingTotal,
+    required this.ratingCount,
+    this.couponTitle = '',
+    this.couponDescription = '',
   });
 
   // From Firestore
@@ -51,8 +59,12 @@ class Store {
       category: List<int>.from(data['category'] ?? []),
       district: data['district'] ?? 0,
       city: data['city'] ?? 0,
-      couponCount: data['couponCount'] ?? 0,
-      userCount: data['userCount'] ?? 0,
+      couponExistCount: data['couponExistCount'] ?? 0,
+      couponUsedCount: data['couponUsedCount'] ?? 0,
+      ratingTotal: data['ratingTotal'] ?? 0,
+      ratingCount: data['ratingCount'] ?? 0,
+      couponTitle: data['couponTitle'] ?? '',
+      couponDescription: data['couponDescription'] ?? '',
     );
   }
 
@@ -75,8 +87,12 @@ class Store {
           : [],
       district: json['district'] ?? 0,
       city: json['city'] ?? 0,
-      couponCount: json['couponCount'] ?? 0,
-      userCount: json['userCount'] ?? 0,
+      couponExistCount: json['couponExistCount'] ?? 0,
+      couponUsedCount: json['couponUsedCount'] ?? 0,
+      ratingTotal: json['ratingTotal'] ?? 0,
+      ratingCount: json['ratingCount'] ?? 0,
+      couponTitle: json['couponTitle'] ?? '',
+      couponDescription: json['couponDescription'] ?? '',
     );
   }
 
@@ -94,8 +110,12 @@ class Store {
       'category': category,
       'district': district,
       'city': city,
-      'couponCount': couponCount,
-      'userCount': userCount,
+      'couponExistCount': couponExistCount,
+      'couponUsedCount': couponUsedCount,
+      'ratingTotal': ratingTotal,
+      'ratingCount': ratingCount,
+      'couponTitle': couponTitle,
+      'couponDescription': couponDescription,
     };
   }
 
@@ -114,8 +134,12 @@ class Store {
       'category': category,
       'district': district,
       'city': city,
-      'couponCount': couponCount,
-      'userCount': userCount,
+      'couponExistCount': couponExistCount,
+      'couponUsedCount': couponUsedCount,
+      'ratingTotal': ratingTotal,
+      'ratingCount': ratingCount,
+      'couponTitle': couponTitle,
+      'couponDescription': couponDescription,
     };
   }
 
@@ -133,8 +157,12 @@ class Store {
     List<int>? category,
     int? district,
     int? city,
-    int? couponCount,
-    int? userCount,
+    int? couponExistCount,
+    int? couponUsedCount,
+    int? ratingTotal,
+    int? ratingCount,
+    String? couponTitle,
+    String? couponDescription,
   }) {
     return Store(
       id: id ?? this.id,
@@ -149,8 +177,12 @@ class Store {
       category: category ?? this.category,
       district: district ?? this.district,
       city: city ?? this.city,
-      couponCount: couponCount ?? this.couponCount,
-      userCount: userCount ?? this.userCount,
+      couponExistCount: couponExistCount ?? this.couponExistCount,
+      couponUsedCount: couponUsedCount ?? this.couponUsedCount,
+      ratingTotal: ratingTotal ?? this.ratingTotal,
+      ratingCount: ratingCount ?? this.ratingCount,
+      couponTitle: couponTitle ?? this.couponTitle,
+      couponDescription: couponDescription ?? this.couponDescription,
     );
   }
 
@@ -176,5 +208,16 @@ class Store {
 
   String get tCategoryGroupList {
     return tCategoryGroup.join(", ");
+  }
+
+  // 평점 계산 (1.0 ~ 5.0)
+  double get rating {
+    if (ratingCount == 0) return 0.0;
+    return ratingTotal / ratingCount;
+  }
+
+  // 평점을 소수점 한 자리로 표시 (예: 4.7)
+  String get formattedRating {
+    return rating.toStringAsFixed(1);
   }
 }

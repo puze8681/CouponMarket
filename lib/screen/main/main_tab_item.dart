@@ -10,8 +10,6 @@ class MainTabItem extends StatelessWidget {
   final String inactiveIcon;
   final String text;
 
-
-
   const MainTabItem({
     super.key,
     required this.isActive,

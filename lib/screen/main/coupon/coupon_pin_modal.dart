@@ -25,7 +25,7 @@ class _CouponPinModalState extends State<CouponPinModal> {
   Widget build(BuildContext context) {
     return Container(
       height: MediaQuery.of(context).size.height * 0.7,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -33,7 +33,7 @@ class _CouponPinModalState extends State<CouponPinModal> {
         children: [
           // 핸들바
           Container(
-            margin: EdgeInsets.only(top: 10, bottom: 10),
+            margin: const EdgeInsets.only(top: 10, bottom: 10),
             width: 40,
             height: 5,
             decoration: BoxDecoration(
@@ -47,14 +47,14 @@ class _CouponPinModalState extends State<CouponPinModal> {
             padding: const EdgeInsets.all(16.0),
             child: Column(
               children: [
-                Text(
+                const Text(
                   '쿠폰 사용 인증',
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Text(
                   '6자리 비밀번호를 입력해주세요',
                   style: TextStyle(
@@ -68,8 +68,8 @@ class _CouponPinModalState extends State<CouponPinModal> {
 
           // 쿠폰 정보
           Container(
-            margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            padding: EdgeInsets.all(16),
+            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: Colors.blue[50],
               borderRadius: BorderRadius.circular(12),
@@ -103,21 +103,21 @@ class _CouponPinModalState extends State<CouponPinModal> {
                     ),
                     child: Icon(Icons.confirmation_num, color: Colors.grey[500]),
                   ),
-                SizedBox(width: 16),
+                const SizedBox(width: 16),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         widget.coupon.title,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      SizedBox(height: 4),
+                      const SizedBox(height: 4),
                       Text(
                         widget.coupon.storeName,
                         style: TextStyle(
@@ -132,7 +132,7 @@ class _CouponPinModalState extends State<CouponPinModal> {
             ),
           ),
 
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
 
           // PIN 코드 표시
           Padding(
@@ -144,7 +144,7 @@ class _CouponPinModalState extends State<CouponPinModal> {
                 return Container(
                   width: 40,
                   height: 48,
-                  margin: EdgeInsets.symmetric(horizontal: 4),
+                  margin: const EdgeInsets.symmetric(horizontal: 4),
                   decoration: BoxDecoration(
                     border: Border.all(
                       color: isFilled ? Colors.blue : Colors.grey[300]!,
@@ -155,7 +155,7 @@ class _CouponPinModalState extends State<CouponPinModal> {
                   ),
                   child: Center(
                     child: isFilled
-                        ? Text(
+                        ? const Text(
                       '●',
                       style: TextStyle(
                         fontSize: 24,
@@ -174,7 +174,7 @@ class _CouponPinModalState extends State<CouponPinModal> {
               padding: const EdgeInsets.only(top: 16),
               child: Text(
                 _errorMessage ?? "",
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.red,
                   fontSize: 14,
                 ),
@@ -189,8 +189,8 @@ class _CouponPinModalState extends State<CouponPinModal> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  CircularProgressIndicator(),
-                  SizedBox(height: 16),
+                  const CircularProgressIndicator(),
+                  const SizedBox(height: 16),
                   Text(
                     '쿠폰 사용 처리 중...',
                     style: TextStyle(
@@ -279,7 +279,7 @@ class NumericKeypad extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
       child: Column(
         children: [
           // 1, 2, 3
@@ -321,7 +321,7 @@ class NumericKeypad extends StatelessWidget {
                   child: GestureDetector(
                     onTap: onClear,
                     child: Container(
-                      margin: EdgeInsets.all(6),
+                      margin: const EdgeInsets.all(6),
                       decoration: BoxDecoration(
                         color: Colors.red[100],
                         borderRadius: BorderRadius.circular(12),
@@ -344,7 +344,7 @@ class NumericKeypad extends StatelessWidget {
                   child: GestureDetector(
                     onTap: onDelete,
                     child: Container(
-                      margin: EdgeInsets.all(6),
+                      margin: const EdgeInsets.all(6),
                       decoration: BoxDecoration(
                         color: Colors.grey[200],
                         borderRadius: BorderRadius.circular(12),
@@ -372,7 +372,7 @@ class NumericKeypad extends StatelessWidget {
       child: GestureDetector(
         onTap: () => onNumberTap(number),
         child: Container(
-          margin: EdgeInsets.all(6),
+          margin: const EdgeInsets.all(6),
           decoration: BoxDecoration(
             color: Colors.grey[200],
             borderRadius: BorderRadius.circular(12),
@@ -380,7 +380,7 @@ class NumericKeypad extends StatelessWidget {
           child: Center(
             child: Text(
               number,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),

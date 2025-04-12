@@ -20,8 +20,12 @@ class StoreDummyData {
         category: [FoodCategoryConstants.KOREAN, FoodCategoryConstants.HOME_STYLE],
         district: KoreanDistrictConstants.SEOUL_GANGNAM,
         city: KoreanCityConstants.SEOUL,
-        couponCount: 24,
-        userCount: 187,
+        couponExistCount: 14,
+        couponUsedCount: 10,
+        ratingTotal: 850,
+        ratingCount: 187,
+        couponTitle: '강남 한식당 10% 할인 쿠폰',
+        couponDescription: '모든 음식 메뉴 10% 할인 (음료 및 주류 제외)',
       ),
       Store(
         id: 'store_002',
@@ -36,8 +40,12 @@ class StoreDummyData {
         category: [FoodCategoryConstants.KOREAN, FoodCategoryConstants.PORK],
         district: KoreanDistrictConstants.SEOUL_MAPO,
         city: KoreanCityConstants.SEOUL,
-        couponCount: 18,
-        userCount: 156,
+        couponExistCount: 10,
+        couponUsedCount: 8,
+        ratingTotal: 702,
+        ratingCount: 156,
+        couponTitle: '마포 돼지갈비 5,000원 할인권',
+        couponDescription: '50,000원 이상 주문 시 현장 결제 5,000원 할인',
       ),
       Store(
         id: 'store_003',
@@ -52,8 +60,12 @@ class StoreDummyData {
         category: [FoodCategoryConstants.ITALIAN, FoodCategoryConstants.PASTA, FoodCategoryConstants.PIZZA],
         district: KoreanDistrictConstants.SEOUL_SEOCHO,
         city: KoreanCityConstants.SEOUL,
-        couponCount: 15,
-        userCount: 142,
+        couponExistCount: 8,
+        couponUsedCount: 7,
+        ratingTotal: 639,
+        ratingCount: 142,
+        couponTitle: '파스타 하우스 디저트 무료 쿠폰',
+        couponDescription: '2인 이상 방문 시 티라미수 1개 무료 제공',
       ),
       Store(
         id: 'store_004',
@@ -68,8 +80,12 @@ class StoreDummyData {
         category: [FoodCategoryConstants.KOREAN, FoodCategoryConstants.SEAFOOD_SOUP_STEW],
         district: KoreanDistrictConstants.SEOUL_JONGNO,
         city: KoreanCityConstants.SEOUL,
-        couponCount: 12,
-        userCount: 98,
+        couponExistCount: 7,
+        couponUsedCount: 5,
+        ratingTotal: 412,
+        ratingCount: 98,
+        couponTitle: '쭈꾸미 메뉴 15% 할인권',
+        couponDescription: '모든 쭈꾸미 메뉴 15% 할인 (주말 및 공휴일 제외)',
       ),
 
       // 부산 지역 매장
@@ -86,8 +102,12 @@ class StoreDummyData {
         category: [FoodCategoryConstants.JAPANESE, FoodCategoryConstants.SASHIMI],
         district: KoreanDistrictConstants.BUSAN_HAEUNDAE,
         city: KoreanCityConstants.BUSAN,
-        couponCount: 20,
-        userCount: 175,
+        couponExistCount: 12,
+        couponUsedCount: 8,
+        ratingTotal: 805,
+        ratingCount: 175,
+        couponTitle: '해운대 횟집 소주 1병 무료',
+        couponDescription: '80,000원 이상 주문 시 소주 1병 무료 제공',
       ),
       Store(
         id: 'store_006',
@@ -102,8 +122,12 @@ class StoreDummyData {
         category: [FoodCategoryConstants.KOREAN, FoodCategoryConstants.PORK],
         district: KoreanDistrictConstants.BUSAN_BUSANJIN,
         city: KoreanCityConstants.BUSAN,
-        couponCount: 16,
-        userCount: 130,
+        couponExistCount: 9,
+        couponUsedCount: 7,
+        ratingTotal: 546,
+        ratingCount: 130,
+        couponTitle: '부산진 돼지국밥 2,000원 할인',
+        couponDescription: '돼지국밥 주문 시 2,000원 할인 (1인 1개 한정)',
       ),
 
       // 인천 지역 매장
@@ -120,8 +144,12 @@ class StoreDummyData {
         category: [FoodCategoryConstants.CHINESE],
         district: KoreanDistrictConstants.INCHEON_YEONSU,
         city: KoreanCityConstants.INCHEON,
-        couponCount: 14,
-        userCount: 120,
+        couponExistCount: 8,
+        couponUsedCount: 6,
+        ratingTotal: 528,
+        ratingCount: 120,
+        couponTitle: '연수 중화요리 군만두 무료',
+        couponDescription: '2인 이상 방문 시 군만두 1인분 무료 제공',
       ),
       Store(
         id: 'store_008',
@@ -136,8 +164,12 @@ class StoreDummyData {
         category: [FoodCategoryConstants.CHICKEN, FoodCategoryConstants.BEER_PUB],
         district: KoreanDistrictConstants.INCHEON_BUPYEONG,
         city: KoreanCityConstants.INCHEON,
-        couponCount: 13,
-        userCount: 115,
+        couponExistCount: 8,
+        couponUsedCount: 5,
+        ratingTotal: 471,
+        ratingCount: 115,
+        couponTitle: '부평 치킨 생맥주 1잔 무료',
+        couponDescription: '치킨 주문 시 생맥주 1잔 무료 (평일 방문 시에만 사용 가능)',
       ),
 
       // 대전 지역 매장
@@ -154,8 +186,12 @@ class StoreDummyData {
         category: [FoodCategoryConstants.KOREAN, FoodCategoryConstants.BEEF, FoodCategoryConstants.HANWOO],
         district: 0, // 더미 데이터이므로 구/군 ID가 없다고 가정
         city: KoreanCityConstants.DAEJEON,
-        couponCount: 10,
-        userCount: 95,
+        couponExistCount: 6,
+        couponUsedCount: 4,
+        ratingTotal: 408,
+        ratingCount: 95,
+        couponTitle: '대전 소고기 구이 상차림 무료',
+        couponDescription: '4인 이상 방문 시 기본 상차림 1개 무료 제공',
       ),
 
       // 광주 지역 매장
@@ -172,8 +208,12 @@ class StoreDummyData {
         category: [FoodCategoryConstants.CAFE, FoodCategoryConstants.DESSERT],
         district: 0, // 더미 데이터이므로 구/군 ID가 없다고 가정
         city: KoreanCityConstants.GWANGJU,
-        couponCount: 8,
-        userCount: 72,
+        couponExistCount: 5,
+        couponUsedCount: 3,
+        ratingTotal: 302,
+        ratingCount: 72,
+        couponTitle: '광주 카페 아메리카노 1+1',
+        couponDescription: '아메리카노 주문 시 동일 음료 1잔 무료 (주말 포함)',
       ),
     ];
   }
@@ -217,6 +257,24 @@ class StoreDummyData {
     }
 
     return filteredStores;
+  }
+
+  // 평점 순으로 매장 가져오기
+  static List<Store> getStoresByRating({int limit = 10}) {
+    final stores = getDummyStores();
+    stores.sort((a, b) {
+      double ratingA = a.ratingTotal / a.ratingCount;
+      double ratingB = b.ratingTotal / b.ratingCount;
+      return ratingB.compareTo(ratingA); // 내림차순 정렬
+    });
+    return stores.take(limit).toList();
+  }
+
+  // 쿠폰 사용 많은 순 매장 가져오기
+  static List<Store> getStoresByCouponUsage({int limit = 10}) {
+    final stores = getDummyStores();
+    stores.sort((a, b) => b.couponUsedCount.compareTo(a.couponUsedCount)); // 내림차순 정렬
+    return stores.take(limit).toList();
   }
 
   // 랜덤 매장 하나 가져오기

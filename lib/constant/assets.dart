@@ -23,6 +23,8 @@ class Assets {
   static const ic_tab_history_selected = 'main/ic_history_selected.svg';
   static const ic_tab_home = 'main/ic_home.svg';
   static const ic_tab_home_selected = 'main/ic_home_selected.svg';
+  static const ic_tab_coupon = 'main/ic_coupon.svg';
+  static const ic_tab_coupon_selected = 'main/ic_coupon_selected.svg';
   static const ic_tab_my = 'main/ic_my.svg';
   static const ic_tab_my_selected = 'main/ic_my_selected.svg';
   static const ic_tab_shopping = 'main/ic_shopping.svg';
@@ -137,16 +139,6 @@ class Assets {
   /// Radio
   static const ic_radio_selected = 'ic_radio_selected.svg';
   static const ic_radio_unselected = 'ic_radio_unselected.svg';
-
-  /// Tab
-  static const ic_tab_home_active = 'ic_tab_home_active.svg';
-  static const ic_tab_home_inactive = 'ic_tab_home_inactive.svg';
-  static const ic_tab_coupon_ticket_active = 'ic_tab_coupon_ticket_active.svg';
-  static const ic_tab_coupon_ticket_inactive = 'ic_tab_coupon_ticket_inactive.svg';
-  static const ic_tab_history_active = 'ic_tab_history_active.svg';
-  static const ic_tab_history_inactive = 'ic_tab_history_inactive.svg';
-  static const ic_tab_more_active = 'ic_tab_more_active.svg';
-  static const ic_tab_more_inactive = 'ic_tab_more_inactive.svg';
 
   /**
    * Image
